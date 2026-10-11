@@ -44,4 +44,18 @@ class ContentIntegrityTest {
         val q = c.questions.first { it.id == "Q0142" }
         assertTrue(q.appNote.isNotBlank())
     }
+
+    @Test fun noInternalEditorialNotesInVisibleText() {
+        val bad = Regex("⚠|corrections_log|review_notes|COR-\\d|\\bU\\d-L\\d\\d\\b|المدقق|تلف النص|الاستخراج الضوئي|نص الكتاب الأصلي")
+        val texts = c.lessons.flatMap { l ->
+            listOf(l.title, l.ruleText, l.summary, l.differences, l.commonErrors) + l.conditions + l.examples.map { it.text + " " + it.note }
+        } + c.questions.flatMap { listOf(it.text, it.answer, it.explanation, it.correctionIfFalse) + it.options }
+        for (t in texts) assertFalse("internal note: " + t.take(50), bad.containsMatchIn(t))
+    }
+
+    @Test fun correctedFactsPresent() {
+        assertTrue(c.lesson("U3-L06")!!.commonErrors.contains("جرير"))
+        assertTrue(c.lesson("U3-L07")!!.commonErrors.contains("1258"))
+        assertFalse(c.lesson("U2-L07")!!.differences.contains("متقاربان جدًا في المخرج"))
+    }
 }

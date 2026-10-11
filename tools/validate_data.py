@@ -30,6 +30,20 @@ for c in C:
         if l not in lids: errs.append(f'{c["id"]}: unknown lesson {l}')
 for l in L["lessons"]:
     if not l["ruleText"].strip(): errs.append(f'{l["id"]}: empty rule')
+
+# لا ملاحظات تحريرية داخلية في النصوص المعروضة للمستخدم
+import re
+BAD = re.compile(r"⚠|corrections_log|review_notes|COR-\d|\bU\d-L\d\d\b|المدقق|تلف النص|الاستخراج الضوئي|نص الكتاب الأصلي")
+def visible_texts():
+    for l in L["lessons"]:
+        for k in ("title","ruleText","summary","differences","commonErrors"): yield l["id"], k, l[k]
+        for t in l["conditions"]: yield l["id"], "conditions", t
+        for e in l["examples"]: yield l["id"], "examples", e["text"] + " " + e["note"]
+    for q in Q:
+        for k in ("text","answer","explanation","correctionIfFalse"): yield q["id"], k, q[k]
+        for o in q["options"]: yield q["id"], "options", o
+for i, k, t in visible_texts():
+    if BAD.search(t): errs.append(f"{i}.{k}: internal editorial note in visible text: {t[:60]}")
 cnt = collections.Counter(q["type"] for q in Q)
 print("questions:", len(Q), dict(cnt))
 print("lessons:", len(L["lessons"]), "corrections:", len(C))

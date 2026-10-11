@@ -82,6 +82,7 @@ meta = {
 def dump(name, obj):
     (OUT / name).write_text(json.dumps(obj, ensure_ascii=False, indent=1), encoding="utf-8")
 
+import apply_fixes; apply_fixes.apply(lessons, questions)
 dump("lessons.json", {"units": units, "lessons": lessons})
 dump("questions.json", questions)
 dump("corrections.json", corrections)
