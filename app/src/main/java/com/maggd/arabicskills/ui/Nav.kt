@@ -15,7 +15,6 @@ fun BottomTabs(vm: AppViewModel) {
         Tab("الدروس", Icons.Filled.MenuBook, Screen.Lessons),
         Tab("اختبار", Icons.Filled.Quiz, Screen.QuizSetup()),
         Tab("بطاقات", Icons.Filled.Style, Screen.Cards),
-        Tab("إحصائيات", Icons.Filled.BarChart, Screen.Stats),
     )
     NavigationBar {
         for (t in tabs) {

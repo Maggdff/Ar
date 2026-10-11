@@ -14,12 +14,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.maggd.arabicskills.logic.ProgressLogic
-import com.maggd.arabicskills.logic.QuizEngine
-import com.maggd.arabicskills.logic.StatsLogic
 import com.maggd.arabicskills.model.Question
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 @Composable
 fun CardsScreen(vm: AppViewModel) {
@@ -47,7 +42,7 @@ fun CardsScreen(vm: AppViewModel) {
             if (deck.isEmpty()) {
                 EmptyState("لا توجد بطاقات في هذا النطاق.")
             } else if (index >= deck.size) {
-                SectionCard("انتهت البطاقات 🎉") {
+                SectionCard("انتهت البطاقات") {
                     Body("راجعت ${deck.size} بطاقة. البطاقات التي لم تعرفها ستظهر أولًا في الجولة القادمة.")
                     BigButton("جولة جديدة") { restart++ }
                 }
@@ -76,72 +71,4 @@ fun CardsScreen(vm: AppViewModel) {
             }
         }
     }
-}
-
-@Composable
-fun StatsScreen(vm: AppViewModel) {
-    val c = vm.content
-    val s = StatsLogic.overall(c, vm.progress)
-    val per = StatsLogic.perLesson(c, vm.progress)
-    val weak = StatsLogic.weakest(per)
-    var confirmReset by remember { mutableStateOf(false) }
-    val fmt = remember { SimpleDateFormat("yyyy/MM/dd  HH:mm", Locale.ENGLISH) }
-
-    AppScaffold("إحصائيات التقدم", onBack = { vm.back() }, bottomBar = { BottomTabs(vm) }) { pad ->
-        ScrollColumn(pad) {
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                StatTile("${s.accuracyPercent}%", "نسبة الصواب", Modifier.weight(1f))
-                StatTile("${s.totalAttempts}", "إجمالي الإجابات", Modifier.weight(1f))
-                StatTile("${s.sessionsCount}", "اختبارات", Modifier.weight(1f))
-            }
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                StatTile("${s.distinctAnswered}/${s.totalQuestionsAvailable}", "أسئلة جرّبتها", Modifier.weight(1f))
-                StatTile("${s.lessonsRead}/${s.lessonsTotal}", "دروس مقروءة", Modifier.weight(1f))
-                StatTile("${s.masteredCards}", "بطاقات متقنة", Modifier.weight(1f))
-            }
-            if (s.mistakesCount > 0) BigButton("أخطائي (${s.mistakesCount}) — أعد اختبارها") { vm.navigate(Screen.Mistakes) }
-
-            if (weak.isNotEmpty()) SectionCard("دروس تحتاج مراجعة") {
-                weak.forEach { w ->
-                    Text(c.lesson(w.lessonId)?.title ?: w.lessonId, fontSize = 15.sp)
-                    PercentBar(w.accuracyPercent)
-                    Text("${w.accuracyPercent}%", fontSize = 12.sp)
-                }
-            }
-
-            SectionCard("التقدم حسب الدرس") {
-                c.units.forEach { u ->
-                    Text(u.title, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
-                    c.lessonsOf(u.id).forEach { l ->
-                        val st = per.first { it.lessonId == l.id }
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(l.title, Modifier.weight(1f), fontSize = 14.sp)
-                            Text(if (st.answered == 0) "—" else "${st.accuracyPercent}% (${st.answered}/${st.available})", fontSize = 13.sp)
-                        }
-                    }
-                }
-            }
-
-            SectionCard("آخر الاختبارات") {
-                if (vm.progress.sessions.isEmpty()) Text("لا توجد اختبارات بعد.")
-                vm.progress.sessions.takeLast(10).reversed().forEach {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Column(Modifier.weight(1f)) {
-                            Text(it.label, fontSize = 14.sp)
-                            Text(fmt.format(Date(it.timestamp)), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        }
-                        Text("${it.correct}/${it.total}  (${QuizEngine.percent(it.correct, it.total)}%)", fontWeight = FontWeight.Bold)
-                    }
-                }
-            }
-            TextButton(onClick = { confirmReset = true }) { Text("مسح التقدم والبدء من جديد") }
-        }
-    }
-    if (confirmReset) AlertDialog(
-        onDismissRequest = { confirmReset = false },
-        title = { Text("مسح التقدم؟") },
-        text = { Text("سيُحذف سجل الإجابات والأخطاء والبطاقات والاختبارات من هذا الجهاز. لا يمكن التراجع.") },
-        confirmButton = { TextButton(onClick = { vm.resetProgress(); confirmReset = false }) { Text("مسح") } },
-        dismissButton = { TextButton(onClick = { confirmReset = false }) { Text("إلغاء") } },
-    )
 }

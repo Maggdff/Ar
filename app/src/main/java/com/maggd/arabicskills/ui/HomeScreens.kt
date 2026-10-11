@@ -2,6 +2,8 @@
 
 package com.maggd.arabicskills.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -27,34 +29,31 @@ import com.maggd.arabicskills.logic.StatsLogic
 /** شريط المطوّر: يظهر أعلى الشاشة الرئيسية فقط (وليس في الإعدادات). */
 @Composable
 fun DeveloperCredit() {
-    Surface(color = Green, modifier = Modifier.fillMaxWidth()) {
+    Column(Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.background)) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             Text(
                 "Developed by Maggd Alosimi",
-                modifier = Modifier.fillMaxWidth().statusBarsPadding().padding(vertical = 10.dp),
-                textAlign = TextAlign.Center, color = Color.White,
-                fontSize = 14.sp, fontWeight = FontWeight.Medium, letterSpacing = 0.5.sp,
+                modifier = Modifier.fillMaxWidth().statusBarsPadding().padding(vertical = 8.dp),
+                textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontSize = 12.sp, letterSpacing = 0.4.sp,
             )
         }
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
     }
 }
 
 @Composable
 fun HomeScreen(vm: AppViewModel) {
     val stats = StatsLogic.overall(vm.content, vm.progress)
+    var confirmReset by remember { mutableStateOf(false) }
     Scaffold(
         topBar = { DeveloperCredit() },
         bottomBar = { BottomTabs(vm) },
     ) { pad ->
         ScrollColumn(pad) {
-            Text(vm.content.meta.title, fontSize = 24.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+            Spacer(Modifier.height(8.dp))
+            Text(vm.content.meta.title, style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.primary)
             Text("مذاكرة وتدريب على قواعد الكتاب ومهاراته، دون حاجة إلى إنترنت.", fontSize = 15.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                StatTile("${stats.lessonsRead}/${stats.lessonsTotal}", "دروس قرأتها", Modifier.weight(1f))
-                StatTile("${stats.accuracyPercent}%", "نسبة الصواب", Modifier.weight(1f))
-                StatTile("${stats.mistakesCount}", "أخطاء للمراجعة", Modifier.weight(1f))
-            }
 
             BigButton("اختبار سريع (10 أسئلة من الكتاب كاملًا)") { vm.startQuiz(QuizScope.WholeBook, 10) }
             BigButton("تصفّح الدروس", secondary = true) { vm.goTab(Screen.Lessons) }
@@ -63,9 +62,17 @@ fun HomeScreen(vm: AppViewModel) {
                 enabled = stats.mistakesCount > 0, secondary = true,
             ) { vm.navigate(Screen.Mistakes) }
             BigButton("بطاقات المراجعة", secondary = true) { vm.goTab(Screen.Cards) }
+            TextButton(onClick = { confirmReset = true }) { Text("مسح التقدم والبدء من جديد") }
 
         }
     }
+    if (confirmReset) AlertDialog(
+        onDismissRequest = { confirmReset = false },
+        title = { Text("مسح التقدم؟") },
+        text = { Text("سيُحذف سجل الإجابات والأخطاء والبطاقات والاختبارات من هذا الجهاز. لا يمكن التراجع.") },
+        confirmButton = { TextButton(onClick = { vm.resetProgress(); confirmReset = false }) { Text("مسح") } },
+        dismissButton = { TextButton(onClick = { confirmReset = false }) { Text("إلغاء") } },
+    )
 }
 
 @Composable
@@ -73,18 +80,20 @@ fun LessonsScreen(vm: AppViewModel) {
     AppScaffold("الدروس", onBack = { vm.back() }, bottomBar = { BottomTabs(vm) }) { pad ->
         ScrollColumn(pad) {
             for (u in vm.content.units) {
-                Text(u.title, fontSize = 18.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                Spacer(Modifier.height(6.dp))
+                Text(u.title, style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
+                HorizontalDivider(thickness = 2.dp, color = MaterialTheme.colorScheme.primary)
                 for (l in vm.content.lessonsOf(u.id)) {
                     val read = l.id in vm.progress.lessonsRead
-                    Card(
-                        onClick = { vm.navigate(Screen.LessonDetail(l.id)) },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(14.dp),
-                    ) {
-                        Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                            Text(l.title, Modifier.weight(1f), fontSize = 16.sp)
+                    Column {
+                        Row(
+                            Modifier.fillMaxWidth().clickable { vm.navigate(Screen.LessonDetail(l.id)) }.padding(vertical = 14.dp),
+                            verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        ) {
+                            Text(l.title, Modifier.weight(1f), fontSize = 16.sp, lineHeight = 24.sp)
                             if (read) Tag("تمت القراءة")
                         }
+                        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                     }
                 }
             }
@@ -116,7 +125,7 @@ fun LessonDetailScreen(vm: AppViewModel, lessonId: String) {
             }
             if (lesson.summary.isNotBlank()) SectionCard("الخلاصة") { Body(lesson.summary) }
             if (lesson.differences.isNotBlank()) SectionCard("فروق مهمة") { Body(lesson.differences) }
-            if (lesson.commonErrors.isNotBlank()) SectionCard("أخطاء شائعة") { Body(lesson.commonErrors) }
+            if (lesson.commonErrors.isNotBlank()) SectionCard("أخطاء شائعة", accent = MaterialTheme.colorScheme.secondary) { Body(lesson.commonErrors) }
             BigButton(
                 if (quizCount > 0) "اختبر نفسك في هذا الدرس ($quizCount سؤالًا)" else "لا أسئلة مصححة تلقائيًا لهذا الدرس",
                 enabled = quizCount > 0,

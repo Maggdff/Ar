@@ -29,6 +29,5 @@ fun AppRoot(vm: AppViewModel = viewModel()) {
         Screen.Result -> ResultScreen(vm)
         Screen.Mistakes -> MistakesScreen(vm)
         Screen.Cards -> CardsScreen(vm)
-        Screen.Stats -> StatsScreen(vm)
     }
 }

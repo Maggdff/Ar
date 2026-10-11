@@ -21,7 +21,7 @@ import com.maggd.arabicskills.model.DiagramItem
 /** رسم تفاعلي واحد داخل شاشة الدرس. النوع يحدد طريقة العرض. */
 @Composable
 fun DiagramView(d: Diagram) {
-    SectionCard("رسم تفاعلي: " + d.title) {
+    SectionCard("رسم تفاعلي: " + d.title, container = MaterialTheme.colorScheme.surface) {
         if (d.hint.isNotBlank()) {
             Text(d.hint, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
@@ -38,7 +38,7 @@ fun DiagramView(d: Diagram) {
 private fun DetailBox(item: DiagramItem) {
     val fg = MaterialTheme.colorScheme.onPrimaryContainer
     Surface(
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(8.dp),
         color = MaterialTheme.colorScheme.primaryContainer,
         modifier = Modifier.fillMaxWidth(),
     ) {
@@ -79,7 +79,7 @@ private fun RevealDiagram(d: Diagram) {
         Card(
             onClick = { shown = if (open) shown - i else shown + i },
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(8.dp),
             colors = CardDefaults.cardColors(
                 containerColor = if (open) OkBg else MaterialTheme.colorScheme.surfaceVariant,
             ),
@@ -127,7 +127,7 @@ private fun FlowDiagram(d: Diagram) {
     }
 
     if (node.answer.isNotBlank()) {
-        Surface(shape = RoundedCornerShape(12.dp), color = OkBg, modifier = Modifier.fillMaxWidth()) {
+        Surface(shape = RoundedCornerShape(8.dp), color = OkBg, modifier = Modifier.fillMaxWidth()) {
             Text(
                 node.answer, Modifier.padding(14.dp), fontSize = 17.sp, lineHeight = 28.sp,
                 fontWeight = FontWeight.Bold, color = Color(0xFF1B3A1C),
@@ -138,11 +138,11 @@ private fun FlowDiagram(d: Diagram) {
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             Button(
                 onClick = { path = path + node.yes; choices = choices + true },
-                modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.weight(1f), shape = RoundedCornerShape(8.dp),
             ) { Text("نعم", fontSize = 16.sp) }
             OutlinedButton(
                 onClick = { path = path + node.no; choices = choices + false },
-                modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.weight(1f), shape = RoundedCornerShape(8.dp),
             ) { Text("لا", fontSize = 16.sp) }
         }
     }
@@ -169,15 +169,15 @@ private fun TimelineDiagram(d: Diagram) {
             Card(
                 onClick = { sel = i },
                 modifier = Modifier.weight(item.weight.coerceAtLeast(0.1f)).fillMaxHeight(),
-                shape = RoundedCornerShape(10.dp),
+                shape = RoundedCornerShape(8.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = if (active) Green else MaterialTheme.colorScheme.surfaceVariant,
+                    containerColor = if (active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
                 ),
             ) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(
                         item.label, fontSize = 13.sp, textAlign = TextAlign.Center, fontWeight = FontWeight.Bold,
-                        color = if (active) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = if (active) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }

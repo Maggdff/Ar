@@ -142,7 +142,7 @@ private fun OptionRow(text: String, answered: Boolean, isCorrectOption: Boolean,
     Card(
         onClick = onClick, enabled = !answered,
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(containerColor = bg, disabledContainerColor = bg),
         border = BorderStroke(if (answered && (isCorrectOption || isSelected)) 2.dp else 1.dp, border),
     ) {

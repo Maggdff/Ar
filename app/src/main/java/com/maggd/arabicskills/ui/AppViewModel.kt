@@ -20,7 +20,6 @@ sealed class Screen {
     object Result : Screen()
     object Mistakes : Screen()
     object Cards : Screen()
-    object Stats : Screen()
 }
 
 data class QuizState(

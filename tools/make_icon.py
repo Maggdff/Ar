@@ -3,7 +3,7 @@
 import os
 from PIL import Image, ImageDraw
 ROOT = os.path.join(os.path.dirname(__file__), "..", "app", "src", "main", "res")
-BG, CREAM, GOLD = "#0F4C45", "#FBF8F1", "#C9A227"
+BG, CREAM, GOLD = "#22305A", "#F3F4F1", "#F5D547"
 V = 108.0
 LEFT = [(53, 80), (27, 71), (27, 41), (53, 49)]
 RIGHT = [(55, 80), (81, 71), (81, 41), (55, 49)]
