@@ -10,9 +10,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        // Tesseract4Android is published on JitPack
-        maven("https://jitpack.io")
     }
 }
-rootProject.name = "OcrPdfArabicEnglish"
+rootProject.name = "ArabicSkills"
 include(":app")
