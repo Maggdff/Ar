@@ -21,7 +21,6 @@ sealed class Screen {
     object Mistakes : Screen()
     object Cards : Screen()
     object Stats : Screen()
-    object Notes : Screen()
 }
 
 data class QuizState(

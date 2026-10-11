@@ -110,7 +110,6 @@ fun QuizScreen(vm: AppViewModel) {
                         if (!ok) Body("الإجابة الصحيحة: ${question.answer}")
                         if (question.explanation.isNotBlank()) Body("الشرح: ${question.explanation}")
                         if (!ok && question.correctionIfFalse.isNotBlank()) Body("التصحيح: ${question.correctionIfFalse}")
-                        if (question.appNote.isNotBlank()) Text("ملاحظة توثيق: ${question.appNote}", fontSize = 13.sp, color = Color(0xFF5D4037))
                     }
                 }
                 BigButton(if (q.isLast) "إنهاء وعرض النتيجة" else "السؤال التالي") { vm.next() }

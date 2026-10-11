@@ -67,7 +67,6 @@ fun CardsScreen(vm: AppViewModel) {
                         Text(q.answer, fontSize = 17.sp, fontWeight = FontWeight.Bold, lineHeight = 28.sp)
                         if (q.explanation.isNotBlank()) Body("الشرح: ${q.explanation}")
                         if (q.correctionIfFalse.isNotBlank()) Body("التصحيح: ${q.correctionIfFalse}")
-                        if (q.appNote.isNotBlank()) Text("ملاحظة توثيق: ${q.appNote}", fontSize = 13.sp)
                     }
                     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Box(Modifier.weight(1f)) { BigButton("لم أعرفها", secondary = true) { vm.reviewCard(q.id, false); index++; revealed = false } }
@@ -145,39 +144,4 @@ fun StatsScreen(vm: AppViewModel) {
         confirmButton = { TextButton(onClick = { vm.resetProgress(); confirmReset = false }) { Text("مسح") } },
         dismissButton = { TextButton(onClick = { confirmReset = false }) { Text("إلغاء") } },
     )
-}
-
-@Composable
-fun NotesScreen(vm: AppViewModel) {
-    val c = vm.content
-    val annotated = c.questions.filter { it.appNote.isNotBlank() }
-    AppScaffold("ملاحظات المراجعة", onBack = { vm.back() }) { pad ->
-        ScrollColumn(pad) {
-            SectionCard("اكتمال الكتاب", container = MaterialTheme.colorScheme.secondaryContainer) {
-                Body(c.meta.completenessNote)
-                Body(c.meta.extractionStatus)
-            }
-            SectionCard("مبدأ التطبيق") {
-                Body("المحتوى مبني على ملفات التحليل المرفقة فقط. لم تُضَف قواعد من خارج الكتاب، وكل تعديل على إجابة أو شرح موثّق أدناه مع سببه.")
-            }
-            if (annotated.isNotEmpty()) SectionCard("أسئلة عُدّل شرحها أو إجابتها (موثّق)") {
-                annotated.forEach { q ->
-                    Text(q.id, fontWeight = FontWeight.Bold)
-                    Body(q.text)
-                    Body(q.appNote)
-                    HorizontalDivider()
-                }
-            }
-            Text("تصحيحات النص المستخرج (${c.corrections.size})", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
-            c.corrections.forEach { k ->
-                SectionCard("${k.id} — ${k.lessonRef}") {
-                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) { Tag(k.status); Tag("الثقة: ${k.confidence}") }
-                    Body("الأصل: ${k.original}")
-                    Body("المقترح: ${k.suggested}")
-                    Body("السبب: ${k.reason}")
-                    if (k.notes.isNotBlank()) Body("ملاحظات: ${k.notes}")
-                }
-            }
-        }
-    }
 }

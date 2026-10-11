@@ -65,7 +65,7 @@ fun SectionCard(title: String? = null, container: Color = MaterialTheme.colorSch
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             if (title != null) Text(title, fontSize = 17.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
-            this.content()
+            content()
         }
     }
 }

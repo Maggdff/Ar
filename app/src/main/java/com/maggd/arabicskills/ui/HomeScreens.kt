@@ -64,14 +64,6 @@ fun HomeScreen(vm: AppViewModel) {
             ) { vm.navigate(Screen.Mistakes) }
             BigButton("بطاقات المراجعة", secondary = true) { vm.goTab(Screen.Cards) }
 
-            if (!vm.content.meta.isCompleteBook) {
-                SectionCard("تنبيه حول اكتمال الكتاب", container = MaterialTheme.colorScheme.secondaryContainer) {
-                    Body("المحتوى المعروض هو ما أمكن استخراجه من النص المقدَّم، وهو غير مكتمل؛ فقد ينتهي النص فجأة داخل الوحدة الثالثة.")
-                    TextButton(onClick = { vm.navigate(Screen.Notes) }) { Text("ملاحظات المراجعة والتصحيحات") }
-                }
-            } else {
-                TextButton(onClick = { vm.navigate(Screen.Notes) }) { Text("ملاحظات المراجعة والتصحيحات") }
-            }
         }
     }
 }
@@ -106,12 +98,9 @@ fun LessonDetailScreen(vm: AppViewModel, lessonId: String) {
     LaunchedEffect(lessonId) { vm.markLessonRead(lessonId) }
     AppScaffold(lesson?.title ?: "درس", onBack = { vm.back() }) { pad ->
         if (lesson == null) { EmptyState("الدرس غير موجود"); return@AppScaffold }
-        var showExcerpt by remember(lessonId) { mutableStateOf(false) }
-        val corrections = vm.content.correctionsOfLesson(lessonId)
         val quizCount = vm.poolSize(QuizScope.OfLesson(lessonId))
         ScrollColumn(pad) {
             Text(lesson.position, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Tag("حالة التحقق: ${lesson.verificationStatus}")
 
             if (lesson.ruleText.isNotBlank()) SectionCard("القاعدة") { Body(lesson.ruleText) }
             if (lesson.conditions.isNotEmpty()) SectionCard("الشروط والتفاصيل") {
@@ -127,22 +116,6 @@ fun LessonDetailScreen(vm: AppViewModel, lessonId: String) {
             if (lesson.summary.isNotBlank()) SectionCard("الخلاصة") { Body(lesson.summary) }
             if (lesson.differences.isNotBlank()) SectionCard("فروق مهمة") { Body(lesson.differences) }
             if (lesson.commonErrors.isNotBlank()) SectionCard("أخطاء شائعة") { Body(lesson.commonErrors) }
-            if (lesson.verificationNotes.isNotBlank()) SectionCard("ملاحظات التحقق") { Body(lesson.verificationNotes) }
-            if (lesson.extractionNote.isNotBlank()) SectionCard("ملاحظة على استخراج النص", container = MaterialTheme.colorScheme.secondaryContainer) { Body(lesson.extractionNote) }
-            if (corrections.isNotEmpty()) SectionCard("تصحيحات موثّقة لهذا الدرس") {
-                corrections.forEach { c ->
-                    Text("${c.id} — ${c.status}", fontWeight = FontWeight.Bold)
-                    Body("الأصل: ${c.original}")
-                    Body("المقترح: ${c.suggested}")
-                    Body("السبب: ${c.reason}")
-                }
-            }
-            if (lesson.excerpt.isNotBlank()) {
-                OutlinedButton(onClick = { showExcerpt = !showExcerpt }, modifier = Modifier.fillMaxWidth()) {
-                    Text(if (showExcerpt) "إخفاء النص الأصلي المستخرج" else "عرض النص الأصلي المستخرج من الكتاب")
-                }
-                if (showExcerpt) SectionCard("النص كما استُخرج (قد يحوي أخطاء مسح ضوئي)") { Body(lesson.excerpt) }
-            }
             BigButton(
                 if (quizCount > 0) "اختبر نفسك في هذا الدرس ($quizCount سؤالًا)" else "لا أسئلة مصححة تلقائيًا لهذا الدرس",
                 enabled = quizCount > 0,
