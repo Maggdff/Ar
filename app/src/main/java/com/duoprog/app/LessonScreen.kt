@@ -199,7 +199,7 @@ private fun ExerciseView(
             }
             ExerciseType.LINE_ORDERING -> (picked.toList() == ex.correctOrder) to picked.joinToString(",")
             ExerciseType.BUG_FINDING -> (selLine == ex.correctLineIndex) to (selLine?.toString() ?: "")
-            ExerciseType.OUTPUT_PREDICTION -> (norm(text) == norm(ex.expectedOutput ?: "")) to text
+            ExerciseType.OUTPUT_PREDICTION -> (norm(text).equals(norm(ex.expectedOutput ?: ""), ignoreCase = true)) to text
             ExerciseType.RUN_CODE -> {
                 val r = runMiniCpp((ex.code ?: emptyList()).joinToString("\n"), ex.stdin ?: emptyList())
                 val out = if (r.error != null) "خطأ: ${r.error}" else r.output

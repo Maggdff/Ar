@@ -1,122 +1,807 @@
 {
-  "id": "u1", "title": "مدخل إلى لغة C++", "description": "التعرف على بنية البرنامج والمتغيرات",
-  "icon": "code", "order": 1,
-  "lessons": [
+ "id": "u1",
+ "title": "مدخل إلى لغة C++",
+ "description": "التعرف على بنية البرنامج والمتغيرات",
+ "icon": "code",
+ "order": 1,
+ "lessons": [
+  {
+   "id": "u1l1",
+   "unitId": "u1",
+   "title": "تعريف لغة C++",
+   "order": 1,
+   "sourcePage": 18,
+   "contentBlocks": [
     {
-      "id":"u1l1","unitId":"u1","title":"تعريف لغة C++","order":1,"sourcePage":18,
-      "contentBlocks":[
-        {"type":"text","lines":["لغة C++ تعتبر من اللغات العالية المستوى High Level Language حيث تكتب نصوصها بلغة قريبة من لغة الإنسان (اللغة الانجليزية).","يقوم مترجم لغة C++ بتحويل هذه النصوص من اللغة عالية المستوى إلى لغة متدنية المستوى تدعى بلغة الآلة Machine Language بحيث يستطيع المعالج أن يتعامل معها وينفذ تعليماتها.","تستخدم لغة C++ للبرمجة بأسلوب البرمجة المهيكلة وبأسلوب البرمجة الكائنية (الهدفية)."]}
-      ],
-      "exercises":[
-        {"id":"u1l1e1","lessonId":"u1l1","type":"MCQ","question":"لغة C++ من أي نوع من اللغات؟","sourcePage":18,
-          "options":["لغة متدنية المستوى","لغة عالية المستوى High Level Language","لغة آلة","لا شيء مما سبق"],"correctOptionIndex":1},
-        {"id":"u1l1e2","lessonId":"u1l1","type":"MCQ","question":"ما اسم اللغة التي يفهمها المعالج مباشرة بعد الترجمة؟","sourcePage":18,
-          "options":["اللغة الإنجليزية","لغة الآلة Machine Language","لغة C","HTML"],"correctOptionIndex":1}
-      ]
-    },
-    {
-      "id":"u1l2","unitId":"u1","title":"الشكل العام للبرنامج","order":2,"sourcePage":19,
-      "contentBlocks":[
-        {"type":"code","lines":["#include <iostream>","using namespace std;","main ( )","{","    // هنا يتم الاعلان عن البيانات وكتابة نص البرنامج","}"]},
-        {"type":"note","lines":["#include <iostream>: المكتبة الخاصة بعمليات الادخال والاخراج.","main(): الدالة الرئيسية التي يبدأ منها تنفيذ البرنامج.","{ }: الأقواس تحدد بداية ونهاية الدالة الرئيسية."]}
-      ],
-      "exercises":[
-        {"id":"u1l2e1","lessonId":"u1l2","type":"MCQ","question":"ما وظيفة السطر #include <iostream> ؟","sourcePage":19,
-          "options":["تعريف المتغيرات","استدعاء المكتبة الخاصة بعمليات الإدخال والإخراج","إنهاء البرنامج","طباعة نص"],"correctOptionIndex":1},
-        {"id":"u1l2e2","lessonId":"u1l2","type":"LINE_ORDERING","question":"رتّب أسطر الشكل العام للبرنامج بالترتيب الصحيح:","sourcePage":19,
-          "shuffledLines":["}","main ( )","#include <iostream>","{","using namespace std;"],
-          "correctOrder":[2,4,1,3,0]}
-      ]
-    },
-    {
-      "id":"u1l3","unitId":"u1","title":"أول برنامج C++","order":3,"sourcePage":19,
-      "contentBlocks":[
-        {"type":"code","lines":["#include <iostream>","using namespace std;","main ( )","{","cout << \" welcome to c++ \" ;","}"]}
-      ],
-      "exercises":[
-        {"id":"u1l3e1","lessonId":"u1l3","type":"OUTPUT_PREDICTION","question":"ما ناتج تنفيذ هذا البرنامج؟","sourcePage":19,
-          "code":["#include <iostream>","using namespace std;","main ( )","{","cout << \" welcome to c++ \" ;","}"],
-          "expectedOutput":" welcome to c++ "},
-        {"id":"u1l3e2","lessonId":"u1l3","type":"CODE_COMPLETION","question":"أكمل الكود لطباعة الجملة الترحيبية:","sourcePage":19,
-          "codeTemplate":["#include <iostream>","using namespace std;","main ( )","{","___ << \" welcome to c++ \" ;","}"],
-          "blankAnswers":["cout"]},
-        {"id":"u1l3e3","lessonId":"u1l3","type":"BUG_FINDING","question":"حدد السطر الذي يحتوي على خطأ في هذا الكود:","sourcePage":19,
-          "buggyCode":["#include <iostream>","using namespace std;","main ( )","{","cout << \" welcome to c++ \"","}"],
-          "correctLineIndex":4,"fixedLineText":"cout << \" welcome to c++ \" ;",
-          "explanation":"ينقص الفاصلة المنقوطة ; في نهاية جملة cout."}
-      ]
-    },
-    {
-      "id":"u1l4","unitId":"u1","title":"عمليتا الإدخال والإخراج","order":4,"sourcePage":21,
-      "contentBlocks":[
-        {"type":"text","lines":["عملية الإدخال cin، الصيغة العامة: cin >> اسم المتغير1 >> اسم المتغير2 >> اسم المتغير3 ;","مثال: cin>> a >> b >> c;"]},
-        {"type":"text","lines":["عملية الإخراج cout، الصيغة العامة: cout << القيمة1 << القيمة2 << القيمة3 ;","مثال: cout << a << b << c;"]}
-      ],
-      "exercises":[
-        {"id":"u1l4e1","lessonId":"u1l4","type":"MCQ","question":"ما رمز عملية الإدخال في C++؟","sourcePage":21,
-          "options":["<<","cin","cout",">>"],"correctOptionIndex":1},
-        {"id":"u1l4e2","lessonId":"u1l4","type":"CODE_COMPLETION","question":"أكمل جملة قراءة ثلاثة متغيرات a, b, c:","sourcePage":21,
-          "codeTemplate":["cin ___ a >> b >> c ;"],"blankAnswers":[">>"]}
-      ]
-    },
-    {
-      "id":"u1l5","unitId":"u1","title":"تنسيق النصوص","order":5,"sourcePage":22,
-      "contentBlocks":[
-        {"type":"text","lines":["المؤثر \\t يترك فراغًا بعدد ثمان مسافات (tab).","المؤثر \\n ينقل مؤشر الكتابة إلى سطر جديد.","ملاحظة: الأمر cout<<\"\\n\"; يكافئ الأمر cout<<endl;"]},
-        {"type":"code","lines":["#include <iostream>","using namespace std;","main ( )","{","cout <<\"welcome \\t to \\t c++\" ;","cout <<\"welcome \\n to \\n c++\" ;","}"]}
-      ],
-      "exercises":[
-        {"id":"u1l5e1","lessonId":"u1l5","type":"OUTPUT_PREDICTION","question":"ما ناتج تنفيذ هذا الكود؟ (اكتب فقط ما يطبعه السطر الثاني كل كلمة بسطر)","sourcePage":22,
-          "code":["cout <<\"welcome \\n to \\n c++\" ;"],"expectedOutput":"welcome \nto \nc++ "},
-        {"id":"u1l5e2","lessonId":"u1l5","type":"MCQ","question":"ماذا يكافئ الأمر cout<<endl; ؟","sourcePage":23,
-          "options":["cout<<\"\\t\";","cout<<\"\\n\";","cin>>x;","لا شيء"],"correctOptionIndex":1}
-      ]
-    },
-    {
-      "id":"u1l6","unitId":"u1","title":"المتغيرات Variables","order":6,"sourcePage":24,
-      "contentBlocks":[
-        {"type":"text","lines":["كل اسم من أسماء المتغيرات مثل x1, x2, x3 يتم وضعه في الذاكرة ويُعطى اسم name ونوع type وحجم size وقيمة value.","مثال: المتغير x1 يملك الاسم x1 والنوع int والحجم 4 بايت."]}
-      ],
-      "exercises":[
-        {"id":"u1l6e1","lessonId":"u1l6","type":"MCQ","question":"ما هي العناصر التي يمتلكها كل متغير؟","sourcePage":24,
-          "options":["اسم ونوع وحجم وقيمة فقط","لون وشكل","اسم فقط","قيمة فقط"],"correctOptionIndex":0}
-      ]
-    },
-    {
-      "id":"u1l7","unitId":"u1","title":"أنواع المتغيرات وأحجامها","order":7,"sourcePage":25,
-      "contentBlocks":[
-        {"type":"note","lines":["char: نوع حرفي، الحجم 1 byte","int: نوع صحيح، الحجم 4 bytes","short int: نوع صحيح قصير، الحجم 2 bytes","Long int: نوع صحيح مضاعف، الحجم 8 bytes","float: نوع حقيقي، الحجم 4 bytes","double: نوع حقيقي مضاعف، الحجم 8 bytes"]}
-      ],
-      "exercises":[
-        {"id":"u1l7e1","lessonId":"u1l7","type":"MCQ","question":"كم حجم المتغير من نوع int؟","sourcePage":25,"options":["1 byte","2 bytes","4 bytes","8 bytes"],"correctOptionIndex":2},
-        {"id":"u1l7e2","lessonId":"u1l7","type":"MCQ","question":"كم حجم المتغير من نوع char؟","sourcePage":25,"options":["1 byte","4 bytes","8 bytes","2 bytes"],"correctOptionIndex":0},
-        {"id":"u1l7e3","lessonId":"u1l7","type":"MCQ","question":"أي الأنواع التالية حجمه 8 bytes؟","sourcePage":25,"options":["int","float","double","char"],"correctOptionIndex":2}
-      ]
-    },
-    {
-      "id":"u1l8","unitId":"u1","title":"قواعد تسمية المتغيرات","order":8,"sourcePage":26,
-      "contentBlocks":[
-        {"type":"text","lines":["1. لا تكون أسماء المتغيرات من الكلمات المحجوزة مثل main.","2. يمكن أن يحتوي الاسم على حروف وأرقام والإشارة (_).","3. لا يجوز أن يبدأ الاسم برقم. مثال: 7up خطأ بسبب البداية برقم.","4. اللغة حساسة لحالة الحرف: المتغير A غير المتغير a."]}
-      ],
-      "exercises":[
-        {"id":"u1l8e1","lessonId":"u1l8","type":"MCQ","question":"أي أسماء المتغيرات التالية غير صحيح؟","sourcePage":26,
-          "options":["up7","my_var","7up","total1"],"correctOptionIndex":2},
-        {"id":"u1l8e2","lessonId":"u1l8","type":"MCQ","question":"هل المتغير A هو نفسه المتغير a في C++؟","sourcePage":26,
-          "options":["نعم دائمًا","لا، اللغة حساسة لحالة الحرف","فقط في الدوال","فقط مع الأرقام"],"correctOptionIndex":1}
-      ]
-    },
-    {
-      "id":"u1l9","unitId":"u1","title":"الإعلان عن المتغيرات","order":9,"sourcePage":27,
-      "contentBlocks":[
-        {"type":"text","lines":["الإعلان عن المتغير: تحديد نوع قيمة المتغير قبل استخدامه. الصيغة العامة: نوع المتغير اسم المتغير ;"]},
-        {"type":"code","lines":["int a ;","int b ;","float t;","// أو عند تعدد المتغيرات من نفس النوع:","int a, b ;"]}
-      ],
-      "exercises":[
-        {"id":"u1l9e1","lessonId":"u1l9","type":"CODE_COMPLETION","question":"أكمل الإعلان عن متغيرين صحيحين a و b في سطر واحد:","sourcePage":27,
-          "codeTemplate":["int a, ___ ;"],"blankAnswers":["b"]},
-        {"id":"u1l9e2","lessonId":"u1l9","type":"MCQ","question":"الغاية من الإعلان عن المتغير هي:","sourcePage":27,
-          "options":["حجز مساحة من الذاكرة بقدر حاجة المتغير اعتمادًا على نوعه","تلوين الشاشة","حذف المتغير","طباعة قيمة المتغير"],"correctOptionIndex":0}
-      ]
+     "type": "text",
+     "lines": [
+      "لغة C++ تعتبر من اللغات العالية المستوى High Level Language حيث تكتب نصوصها بلغة قريبة من لغة الإنسان (اللغة الانجليزية).",
+      "يقوم مترجم لغة C++ بتحويل هذه النصوص من اللغة عالية المستوى إلى لغة متدنية المستوى تدعى بلغة الآلة Machine Language بحيث يستطيع المعالج أن يتعامل معها وينفذ تعليماتها.",
+      "تستخدم لغة C++ للبرمجة بأسلوب البرمجة المهيكلة وبأسلوب البرمجة الكائنية (الهدفية)."
+     ]
     }
-  ]
+   ],
+   "exercises": [
+    {
+     "id": "u1l1e1",
+     "lessonId": "u1l1",
+     "type": "MCQ",
+     "question": "لغة C++ من أي نوع من اللغات؟",
+     "sourcePage": 18,
+     "options": [
+      "لغة متدنية المستوى",
+      "لغة عالية المستوى High Level Language",
+      "لغة آلة",
+      "لا شيء مما سبق"
+     ],
+     "correctOptionIndex": 1
+    },
+    {
+     "id": "u1l1e2",
+     "lessonId": "u1l1",
+     "type": "MCQ",
+     "question": "ما اسم اللغة التي يفهمها المعالج مباشرة بعد الترجمة؟",
+     "sourcePage": 18,
+     "options": [
+      "HTML",
+      "لغة الآلة Machine Language",
+      "اللغة الإنجليزية",
+      "لغة C"
+     ],
+     "correctOptionIndex": 1
+    },
+    {
+     "id": "u1l1e3",
+     "lessonId": "u1l1",
+     "type": "MCQ",
+     "question": "تستخدم لغة C++ للبرمجة بأسلوب:",
+     "sourcePage": 18,
+     "xpReward": 10,
+     "options": [
+      "البرمجة المهيكلة والبرمجة الكائنية (الهدفية)",
+      "البرمجة الصوتية فقط",
+      "البرمجة اليدوية",
+      "البرمجة المهيكلة فقط"
+     ],
+     "correctOptionIndex": 0
+    },
+    {
+     "id": "u1l1e4",
+     "lessonId": "u1l1",
+     "type": "MCQ",
+     "question": "ما وظيفة مترجم لغة C++؟",
+     "sourcePage": 18,
+     "xpReward": 10,
+     "options": [
+      "تصميم واجهة البرنامج",
+      "تحويل نصوص البرنامج إلى لغة الآلة",
+      "طباعة البرنامج على الورق",
+      "حذف الأخطاء تلقائيًا"
+     ],
+     "correctOptionIndex": 1,
+     "explanation": "يحوّل المترجم النصوص من اللغة عالية المستوى إلى لغة الآلة Machine Language."
+    }
+   ]
+  },
+  {
+   "id": "u1l2",
+   "unitId": "u1",
+   "title": "الشكل العام للبرنامج",
+   "order": 2,
+   "sourcePage": 19,
+   "contentBlocks": [
+    {
+     "type": "code",
+     "lines": [
+      "#include <iostream>",
+      "using namespace std;",
+      "main ( )",
+      "{",
+      "    // هنا يتم الاعلان عن البيانات وكتابة نص البرنامج",
+      "}"
+     ]
+    },
+    {
+     "type": "note",
+     "lines": [
+      "#include <iostream>: المكتبة الخاصة بعمليات الادخال والاخراج.",
+      "main(): الدالة الرئيسية التي يبدأ منها تنفيذ البرنامج.",
+      "{ }: الأقواس تحدد بداية ونهاية الدالة الرئيسية."
+     ]
+    }
+   ],
+   "exercises": [
+    {
+     "id": "u1l2e1",
+     "lessonId": "u1l2",
+     "type": "MCQ",
+     "question": "ما وظيفة السطر #include <iostream> ؟",
+     "sourcePage": 19,
+     "options": [
+      "إنهاء البرنامج",
+      "استدعاء المكتبة الخاصة بعمليات الإدخال والإخراج",
+      "تعريف المتغيرات",
+      "طباعة نص"
+     ],
+     "correctOptionIndex": 1
+    },
+    {
+     "id": "u1l2e2",
+     "lessonId": "u1l2",
+     "type": "LINE_ORDERING",
+     "question": "رتّب أسطر الشكل العام للبرنامج بالترتيب الصحيح:",
+     "sourcePage": 19,
+     "shuffledLines": [
+      "}",
+      "main ( )",
+      "#include <iostream>",
+      "{",
+      "using namespace std;"
+     ],
+     "correctOrder": [
+      2,
+      4,
+      1,
+      3,
+      0
+     ]
+    },
+    {
+     "id": "u1l2e3",
+     "lessonId": "u1l2",
+     "type": "MCQ",
+     "question": "ما وظيفة الدالة main() في برنامج C++؟",
+     "sourcePage": 19,
+     "xpReward": 10,
+     "options": [
+      "طباعة نص ثابت",
+      "إنهاء البرنامج دائمًا",
+      "استدعاء مكتبة الإدخال والإخراج",
+      "الدالة الرئيسية التي يبدأ منها تنفيذ البرنامج"
+     ],
+     "correctOptionIndex": 3
+    },
+    {
+     "id": "u1l2e4",
+     "lessonId": "u1l2",
+     "type": "MCQ",
+     "question": "ماذا يدل القوس { بعد main ( ) ؟",
+     "sourcePage": 19,
+     "xpReward": 10,
+     "options": [
+      "بداية الدالة الرئيسية",
+      "بداية المكتبة",
+      "نهاية الدالة الرئيسية",
+      "تعليق"
+     ],
+     "correctOptionIndex": 0,
+     "explanation": "القوس { للدلالة على بداية الدالة الرئيسية، و } للدلالة على نهايتها."
+    },
+    {
+     "id": "u1l2e5",
+     "lessonId": "u1l2",
+     "type": "CODE_COMPLETION",
+     "question": "أكمل اسم الدالة الرئيسية في الشكل العام للبرنامج:",
+     "sourcePage": 19,
+     "xpReward": 10,
+     "codeTemplate": [
+      "#include <iostream>",
+      "using namespace std;",
+      "___ ( )",
+      "{",
+      "}"
+     ],
+     "blankAnswers": [
+      "main"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "u1l3",
+   "unitId": "u1",
+   "title": "أول برنامج C++",
+   "order": 3,
+   "sourcePage": 19,
+   "contentBlocks": [
+    {
+     "type": "code",
+     "lines": [
+      "#include <iostream>",
+      "using namespace std;",
+      "main ( )",
+      "{",
+      "cout << \" welcome to c++ \" ;",
+      "}"
+     ]
+    }
+   ],
+   "exercises": [
+    {
+     "id": "u1l3e1",
+     "lessonId": "u1l3",
+     "type": "OUTPUT_PREDICTION",
+     "question": "ما ناتج تنفيذ هذا البرنامج؟",
+     "sourcePage": 19,
+     "code": [
+      "#include <iostream>",
+      "using namespace std;",
+      "main ( )",
+      "{",
+      "cout << \" welcome to c++ \" ;",
+      "}"
+     ],
+     "expectedOutput": " welcome to c++ "
+    },
+    {
+     "id": "u1l3e2",
+     "lessonId": "u1l3",
+     "type": "CODE_COMPLETION",
+     "question": "أكمل الكود لطباعة الجملة الترحيبية:",
+     "sourcePage": 19,
+     "codeTemplate": [
+      "#include <iostream>",
+      "using namespace std;",
+      "main ( )",
+      "{",
+      "___ << \" welcome to c++ \" ;",
+      "}"
+     ],
+     "blankAnswers": [
+      "cout"
+     ]
+    },
+    {
+     "id": "u1l3e3",
+     "lessonId": "u1l3",
+     "type": "BUG_FINDING",
+     "question": "حدد السطر الذي يحتوي على خطأ في هذا الكود:",
+     "sourcePage": 19,
+     "buggyCode": [
+      "#include <iostream>",
+      "using namespace std;",
+      "main ( )",
+      "{",
+      "cout << \" welcome to c++ \"",
+      "}"
+     ],
+     "correctLineIndex": 4,
+     "fixedLineText": "cout << \" welcome to c++ \" ;",
+     "explanation": "ينقص الفاصلة المنقوطة ; في نهاية جملة cout."
+    },
+    {
+     "id": "u1l3e4",
+     "lessonId": "u1l3",
+     "type": "OUTPUT_PREDICTION",
+     "question": "ما الذي يطبعه هذا البرنامج؟",
+     "sourcePage": 19,
+     "xpReward": 10,
+     "code": [
+      "cout << \"Hello\";"
+     ],
+     "expectedOutput": "Hello"
+    },
+    {
+     "id": "u1l3e5",
+     "lessonId": "u1l3",
+     "type": "CODE_COMPLETION",
+     "question": "أكمل عامل الإخراج لطباعة الجملة:",
+     "sourcePage": 19,
+     "xpReward": 10,
+     "codeTemplate": [
+      "cout ___ \"welcome\" ;"
+     ],
+     "blankAnswers": [
+      "<<"
+     ]
+    },
+    {
+     "id": "u1l3e6",
+     "lessonId": "u1l3",
+     "type": "BUG_FINDING",
+     "question": "حدد السطر الذي يحتوي على خطأ (اتجاه عامل الإخراج):",
+     "sourcePage": 19,
+     "xpReward": 10,
+     "buggyCode": [
+      "#include <iostream>",
+      "using namespace std;",
+      "main ( )",
+      "{",
+      "cout >> \"hi\" ;",
+      "}"
+     ],
+     "correctLineIndex": 4,
+     "fixedLineText": "cout << \"hi\" ;",
+     "explanation": "عامل الإخراج مع cout هو << وليس >>."
+    }
+   ]
+  },
+  {
+   "id": "u1l4",
+   "unitId": "u1",
+   "title": "عمليتا الإدخال والإخراج",
+   "order": 4,
+   "sourcePage": 21,
+   "contentBlocks": [
+    {
+     "type": "text",
+     "lines": [
+      "عملية الإدخال cin، الصيغة العامة: cin >> اسم المتغير1 >> اسم المتغير2 >> اسم المتغير3 ;",
+      "مثال: cin>> a >> b >> c;"
+     ]
+    },
+    {
+     "type": "text",
+     "lines": [
+      "عملية الإخراج cout، الصيغة العامة: cout << القيمة1 << القيمة2 << القيمة3 ;",
+      "مثال: cout << a << b << c;"
+     ]
+    }
+   ],
+   "exercises": [
+    {
+     "id": "u1l4e1",
+     "lessonId": "u1l4",
+     "type": "MCQ",
+     "question": "ما الكلمة المستخدمة في C++ لعملية الإدخال (القراءة من لوحة المفاتيح)؟",
+     "sourcePage": 21,
+     "options": [
+      "cin",
+      "input",
+      "cout",
+      "print"
+     ],
+     "correctOptionIndex": 0,
+     "explanation": "عملية الإدخال تتم بالأمر cin مع عامل الإدخال >> ."
+    },
+    {
+     "id": "u1l4e2",
+     "lessonId": "u1l4",
+     "type": "CODE_COMPLETION",
+     "question": "أكمل جملة قراءة ثلاثة متغيرات a, b, c:",
+     "sourcePage": 21,
+     "codeTemplate": [
+      "cin ___ a >> b >> c ;"
+     ],
+     "blankAnswers": [
+      ">>"
+     ]
+    },
+    {
+     "id": "u1l4e3",
+     "lessonId": "u1l4",
+     "type": "MCQ",
+     "question": "ما عامل الإخراج المستخدم مع cout ؟",
+     "sourcePage": 21,
+     "xpReward": 10,
+     "options": [
+      "=>",
+      "<<",
+      ">>",
+      "::"
+     ],
+     "correctOptionIndex": 1
+    },
+    {
+     "id": "u1l4e4",
+     "lessonId": "u1l4",
+     "type": "CODE_COMPLETION",
+     "question": "أكمل سطر الطباعة لتظهر قيم a و b و c بالترتيب:",
+     "sourcePage": 21,
+     "xpReward": 10,
+     "codeTemplate": [
+      "cout << a << ___ << c ;"
+     ],
+     "blankAnswers": [
+      "b"
+     ]
+    },
+    {
+     "id": "u1l4e5",
+     "lessonId": "u1l4",
+     "type": "MCQ",
+     "question": "أي سطر صحيح لقراءة المتغيرين a و b من لوحة المفاتيح؟",
+     "sourcePage": 21,
+     "xpReward": 10,
+     "options": [
+      "read a, b ;",
+      "cout >> a >> b ;",
+      "cin << a << b ;",
+      "cin >> a >> b ;"
+     ],
+     "correctOptionIndex": 3
+    }
+   ]
+  },
+  {
+   "id": "u1l5",
+   "unitId": "u1",
+   "title": "تنسيق النصوص",
+   "order": 5,
+   "sourcePage": 22,
+   "contentBlocks": [
+    {
+     "type": "text",
+     "lines": [
+      "المؤثر \\t يترك فراغًا بعدد ثمان مسافات (tab).",
+      "المؤثر \\n ينقل مؤشر الكتابة إلى سطر جديد.",
+      "ملاحظة: الأمر cout<<\"\\n\"; يكافئ الأمر cout<<endl;"
+     ]
+    },
+    {
+     "type": "code",
+     "lines": [
+      "#include <iostream>",
+      "using namespace std;",
+      "main ( )",
+      "{",
+      "cout <<\"welcome \\t to \\t c++\" ;",
+      "cout <<\"welcome \\n to \\n c++\" ;",
+      "}"
+     ]
+    }
+   ],
+   "exercises": [
+    {
+     "id": "u1l5e1",
+     "lessonId": "u1l5",
+     "type": "OUTPUT_PREDICTION",
+     "question": "ما ناتج تنفيذ هذا الكود؟ (اكتب فقط ما يطبعه السطر الثاني كل كلمة بسطر)",
+     "sourcePage": 22,
+     "code": [
+      "cout <<\"welcome \\n to \\n c++\" ;"
+     ],
+     "expectedOutput": "welcome \nto \nc++ "
+    },
+    {
+     "id": "u1l5e2",
+     "lessonId": "u1l5",
+     "type": "MCQ",
+     "question": "ماذا يكافئ الأمر cout<<endl; ؟",
+     "sourcePage": 23,
+     "options": [
+      "cout<<\"\\t\";",
+      "cout<<\"\\n\";",
+      "cin>>x;",
+      "لا شيء"
+     ],
+     "correctOptionIndex": 1
+    },
+    {
+     "id": "u1l5e3",
+     "lessonId": "u1l5",
+     "type": "OUTPUT_PREDICTION",
+     "question": "ما الذي تطبعه التعليمة؟ (اكتب الناتج بأي تنسيق)",
+     "sourcePage": 22,
+     "xpReward": 10,
+     "code": [
+      "cout << \"A\\nB\";"
+     ],
+     "expectedOutput": "A B",
+     "explanation": "المؤثر \\n ينقل المؤشر إلى سطر جديد، فيظهر A في سطر وB في السطر التالي."
+    },
+    {
+     "id": "u1l5e4",
+     "lessonId": "u1l5",
+     "type": "MCQ",
+     "question": "ماذا يفعل المؤثر \\t داخل جملة cout ؟",
+     "sourcePage": 22,
+     "xpReward": 10,
+     "options": [
+      "يحذف الكلمة",
+      "ينقل إلى سطر جديد",
+      "ينهي البرنامج",
+      "يترك فراغًا بعدد ثمان مسافات (tab)"
+     ],
+     "correctOptionIndex": 3
+    }
+   ]
+  },
+  {
+   "id": "u1l6",
+   "unitId": "u1",
+   "title": "المتغيرات Variables",
+   "order": 6,
+   "sourcePage": 24,
+   "contentBlocks": [
+    {
+     "type": "text",
+     "lines": [
+      "كل اسم من أسماء المتغيرات مثل x1, x2, x3 يتم وضعه في الذاكرة ويُعطى اسم name ونوع type وحجم size وقيمة value.",
+      "مثال: المتغير x1 يملك الاسم x1 والنوع int والحجم 4 بايت."
+     ]
+    }
+   ],
+   "exercises": [
+    {
+     "id": "u1l6e1",
+     "lessonId": "u1l6",
+     "type": "MCQ",
+     "question": "ما هي العناصر التي يمتلكها كل متغير؟",
+     "sourcePage": 24,
+     "options": [
+      "اسم فقط",
+      "لون وشكل",
+      "قيمة فقط",
+      "اسم ونوع وحجم وقيمة فقط"
+     ],
+     "correctOptionIndex": 3
+    },
+    {
+     "id": "u1l6e2",
+     "lessonId": "u1l6",
+     "type": "MCQ",
+     "question": "في المثال x1 = 5، ماذا تمثل القيمة 5 بالنسبة للمتغير x1؟",
+     "sourcePage": 24,
+     "xpReward": 10,
+     "options": [
+      "النوع type",
+      "الاسم name",
+      "القيمة value",
+      "الحجم size"
+     ],
+     "correctOptionIndex": 2
+    }
+   ]
+  },
+  {
+   "id": "u1l7",
+   "unitId": "u1",
+   "title": "أنواع المتغيرات وأحجامها",
+   "order": 7,
+   "sourcePage": 25,
+   "contentBlocks": [
+    {
+     "type": "note",
+     "lines": [
+      "char: نوع حرفي، الحجم 1 byte",
+      "int: نوع صحيح، الحجم 4 bytes",
+      "short int: نوع صحيح قصير، الحجم 2 bytes",
+      "Long int: نوع صحيح مضاعف، الحجم 8 bytes",
+      "float: نوع حقيقي، الحجم 4 bytes",
+      "double: نوع حقيقي مضاعف، الحجم 8 bytes"
+     ]
+    }
+   ],
+   "exercises": [
+    {
+     "id": "u1l7e1",
+     "lessonId": "u1l7",
+     "type": "MCQ",
+     "question": "كم حجم المتغير من نوع int؟",
+     "sourcePage": 25,
+     "options": [
+      "2 bytes",
+      "4 bytes",
+      "8 bytes",
+      "1 byte"
+     ],
+     "correctOptionIndex": 1
+    },
+    {
+     "id": "u1l7e2",
+     "lessonId": "u1l7",
+     "type": "MCQ",
+     "question": "كم حجم المتغير من نوع char؟",
+     "sourcePage": 25,
+     "options": [
+      "4 bytes",
+      "1 byte",
+      "2 bytes",
+      "8 bytes"
+     ],
+     "correctOptionIndex": 1
+    },
+    {
+     "id": "u1l7e3",
+     "lessonId": "u1l7",
+     "type": "MCQ",
+     "question": "أي الأنواع التالية حجمه 8 bytes؟",
+     "sourcePage": 25,
+     "options": [
+      "int",
+      "double",
+      "char",
+      "float"
+     ],
+     "correctOptionIndex": 1
+    },
+    {
+     "id": "u1l7e4",
+     "lessonId": "u1l7",
+     "type": "MCQ",
+     "question": "كم حجم المتغير من نوع short int ؟",
+     "sourcePage": 25,
+     "xpReward": 10,
+     "options": [
+      "2 bytes",
+      "1 byte",
+      "8 bytes",
+      "4 bytes"
+     ],
+     "correctOptionIndex": 0
+    },
+    {
+     "id": "u1l7e5",
+     "lessonId": "u1l7",
+     "type": "MCQ",
+     "question": "أي نوع مناسب لتخزين حرف واحد مثل 'A' ؟",
+     "sourcePage": 25,
+     "xpReward": 10,
+     "options": [
+      "float",
+      "int",
+      "double",
+      "char"
+     ],
+     "correctOptionIndex": 3,
+     "explanation": "نوع char هو النوع الحرفي وحجمه 1 byte."
+    }
+   ]
+  },
+  {
+   "id": "u1l8",
+   "unitId": "u1",
+   "title": "قواعد تسمية المتغيرات",
+   "order": 8,
+   "sourcePage": 26,
+   "contentBlocks": [
+    {
+     "type": "text",
+     "lines": [
+      "1. لا تكون أسماء المتغيرات من الكلمات المحجوزة مثل main.",
+      "2. يمكن أن يحتوي الاسم على حروف وأرقام والإشارة (_).",
+      "3. لا يجوز أن يبدأ الاسم برقم. مثال: 7up خطأ بسبب البداية برقم.",
+      "4. اللغة حساسة لحالة الحرف: المتغير A غير المتغير a."
+     ]
+    }
+   ],
+   "exercises": [
+    {
+     "id": "u1l8e1",
+     "lessonId": "u1l8",
+     "type": "MCQ",
+     "question": "أي أسماء المتغيرات التالية غير صحيح؟",
+     "sourcePage": 26,
+     "options": [
+      "up7",
+      "7up",
+      "total1",
+      "my_var"
+     ],
+     "correctOptionIndex": 1
+    },
+    {
+     "id": "u1l8e2",
+     "lessonId": "u1l8",
+     "type": "MCQ",
+     "question": "هل المتغير A هو نفسه المتغير a في C++؟",
+     "sourcePage": 26,
+     "options": [
+      "نعم دائمًا",
+      "فقط في الدوال",
+      "لا، اللغة حساسة لحالة الحرف",
+      "فقط مع الأرقام"
+     ],
+     "correctOptionIndex": 2
+    },
+    {
+     "id": "u1l8e3",
+     "lessonId": "u1l8",
+     "type": "MCQ",
+     "question": "أي الأسماء التالية يصلح اسمًا لمتغير؟",
+     "sourcePage": 26,
+     "xpReward": 10,
+     "options": [
+      "main",
+      "7up",
+      "a-b",
+      "sum_1"
+     ],
+     "correctOptionIndex": 3,
+     "explanation": "7up يبدأ برقم، و main كلمة محجوزة، والرمز - غير مسموح داخل الاسم."
+    },
+    {
+     "id": "u1l8e4",
+     "lessonId": "u1l8",
+     "type": "MCQ",
+     "question": "المتغيران Sum و sum في لغة C++ :",
+     "sourcePage": 26,
+     "xpReward": 10,
+     "options": [
+      "يمثلان نفس القيمة دائمًا",
+      "متغيران مختلفان",
+      "متغير واحد",
+      "يسببان خطأ دائمًا"
+     ],
+     "correctOptionIndex": 1,
+     "explanation": "اللغة حساسة لحالة الحرف."
+    }
+   ]
+  },
+  {
+   "id": "u1l9",
+   "unitId": "u1",
+   "title": "الإعلان عن المتغيرات",
+   "order": 9,
+   "sourcePage": 27,
+   "contentBlocks": [
+    {
+     "type": "text",
+     "lines": [
+      "الإعلان عن المتغير: تحديد نوع قيمة المتغير قبل استخدامه. الصيغة العامة: نوع المتغير اسم المتغير ;"
+     ]
+    },
+    {
+     "type": "code",
+     "lines": [
+      "int a ;",
+      "int b ;",
+      "float t;",
+      "// أو عند تعدد المتغيرات من نفس النوع:",
+      "int a, b ;"
+     ]
+    }
+   ],
+   "exercises": [
+    {
+     "id": "u1l9e1",
+     "lessonId": "u1l9",
+     "type": "CODE_COMPLETION",
+     "question": "أكمل الإعلان عن متغيرين صحيحين a و b في سطر واحد:",
+     "sourcePage": 27,
+     "codeTemplate": [
+      "int a, ___ ;"
+     ],
+     "blankAnswers": [
+      "b"
+     ]
+    },
+    {
+     "id": "u1l9e2",
+     "lessonId": "u1l9",
+     "type": "MCQ",
+     "question": "الغاية من الإعلان عن المتغير هي:",
+     "sourcePage": 27,
+     "options": [
+      "طباعة قيمة المتغير",
+      "تلوين الشاشة",
+      "حجز مساحة من الذاكرة بقدر حاجة المتغير اعتمادًا على نوعه",
+      "حذف المتغير"
+     ],
+     "correctOptionIndex": 2
+    },
+    {
+     "id": "u1l9e3",
+     "lessonId": "u1l9",
+     "type": "CODE_COMPLETION",
+     "question": "أكمل الإعلان عن متغير حقيقي اسمه t من نوع float:",
+     "sourcePage": 27,
+     "xpReward": 10,
+     "codeTemplate": [
+      "___ t;"
+     ],
+     "blankAnswers": [
+      "float"
+     ]
+    },
+    {
+     "id": "u1l9e4",
+     "lessonId": "u1l9",
+     "type": "BUG_FINDING",
+     "question": "حدد السطر الذي ينقصه شيء:",
+     "sourcePage": 27,
+     "xpReward": 10,
+     "buggyCode": [
+      "int a;",
+      "int b",
+      "float t;"
+     ],
+     "correctLineIndex": 1,
+     "fixedLineText": "int b;",
+     "explanation": "ينقص الفاصلة المنقوطة ; في نهاية الإعلان."
+    }
+   ]
+  }
+ ]
 }
