@@ -29,6 +29,15 @@ import kotlinx.coroutines.launch
 private val Green = Color(0xFF58CC02)
 private val Red = Color(0xFFFF4B4B)
 
+private val latinRun = Regex(
+    "[A-Za-z0-9#<>_+*/%=(){}\\[\\]\"'&|!\\\\.:;~^-]+(?:[ ,]+[A-Za-z0-9#<>_+*/%=(){}\\[\\]\"'&|!\\\\.:;~^-]+)*"
+)
+
+/** يعزل المقاطع الإنجليزية/البرمجية داخل النص العربي حتى لا يختلط ترتيب العرض */
+fun bidi(s: String): String = latinRun.replace(s) { m ->
+    if (m.value.any { it.isLetterOrDigit() }) "\u2066" + m.value + "\u2069" else m.value
+}
+
 private fun norm(s: String) = s.replace(Regex("\\s+"), "")
 
 @Composable
@@ -49,6 +58,7 @@ fun LessonScreen(lesson: Lesson, onExit: () -> Unit) {
         val stars = when { wrong == 0 -> 3; wrong <= 2 -> 2; else -> 1 }
         scope.launch {
             try { repo?.markLessonCompleted(lesson.id, lesson.unitId, stars) } catch (_: Exception) {}
+            onExit()
         }
         phase = 2
     }
@@ -73,12 +83,12 @@ fun LessonScreen(lesson: Lesson, onExit: () -> Unit) {
                         ex = ex,
                         isLast = index == lesson.exercises.size - 1,
                         onChecked = { correct, answer ->
-                            if (!correct) wrong++ else xp += ex.xpReward
+                            if (!correct) wrong++ else xp += 1
                             scope.launch {
                                 try {
                                     repo?.recordAttempt(ex.id, lesson.id, correct, answer)
                                     if (correct) {
-                                        repo?.addXp(ex.xpReward)
+                                        repo?.addXp(if (ex.xpReward > 0) ex.xpReward else 10)
                                         repo?.incrementCorrectAnswers()
                                     }
                                 } catch (_: Exception) {}
@@ -89,20 +99,7 @@ fun LessonScreen(lesson: Lesson, onExit: () -> Unit) {
                 }
             }
         }
-        else -> Column(
-            Modifier.fillMaxSize().padding(24.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
-        ) {
-            val stars = when { wrong == 0 -> 3; wrong <= 2 -> 2; else -> 1 }
-            Text("🎉 أحسنت!", style = MaterialTheme.typography.headlineMedium)
-            Spacer(Modifier.height(12.dp))
-            Text("★".repeat(stars) + "☆".repeat(3 - stars), style = MaterialTheme.typography.displaySmall, color = Color(0xFFFFC800))
-            Spacer(Modifier.height(12.dp))
-            Text("حصلت على $xp نقطة خبرة")
-            Spacer(Modifier.height(24.dp))
-            Button(onClick = onExit, colors = ButtonDefaults.buttonColors(containerColor = Green)) { Text("العودة للدروس") }
-        }
+        else -> Box(Modifier.fillMaxSize())
     }
 }
 
@@ -113,7 +110,7 @@ private fun LessonContent(lesson: Lesson, onStart: () -> Unit) {
         verticalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(vertical = 16.dp)
     ) {
-        item { Text(lesson.title, style = MaterialTheme.typography.headlineSmall) }
+        item { Text(bidi(lesson.title), style = MaterialTheme.typography.headlineSmall) }
         items(lesson.contentBlocks) { block -> ContentBlockView(block) }
         item {
             Button(
@@ -134,11 +131,11 @@ private fun ContentBlockView(block: ContentBlock) {
             colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF4CC))
         ) {
             Column(Modifier.padding(12.dp)) {
-                block.lines.forEach { Text("💡 $it", color = Color.Black) }
+                block.lines.forEach { Text(bidi("💡 $it"), color = Color.Black) }
             }
         }
         else -> Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            block.lines.forEach { Text(it, style = MaterialTheme.typography.bodyLarge) }
+            block.lines.forEach { Text(bidi(it), style = MaterialTheme.typography.bodyLarge) }
         }
     }
 }
@@ -219,7 +216,7 @@ private fun ExerciseView(
             Modifier.weight(1f).verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Text(ex.question, style = MaterialTheme.typography.titleMedium)
+            Text(bidi(ex.question), style = MaterialTheme.typography.titleMedium)
 
             when (ex.type) {
                 ExerciseType.MCQ -> ex.options.orEmpty().forEachIndexed { i, opt ->
@@ -233,7 +230,7 @@ private fun ExerciseView(
                     OutlinedCard(
                         Modifier.fillMaxWidth().clickable(enabled = !locked) { selOption = i },
                         border = BorderStroke(2.dp, border)
-                    ) { Text(opt, Modifier.padding(14.dp)) }
+                    ) { Text(bidi(opt), Modifier.padding(14.dp)) }
                 }
 
                 ExerciseType.CODE_COMPLETION -> {
@@ -263,7 +260,7 @@ private fun ExerciseView(
                         ) {
                             Row(Modifier.padding(12.dp)) {
                                 if (pos >= 0) Text("${pos + 1}.  ", color = MaterialTheme.colorScheme.primary)
-                                Text(line)
+                                Text(bidi(line))
                             }
                         }
                     }
@@ -294,7 +291,7 @@ private fun ExerciseView(
 
                 ExerciseType.RUN_CODE -> {
                     CodeBox(ex.code.orEmpty())
-                    if (!ex.stdin.isNullOrEmpty()) Text("المدخلات: " + ex.stdin.joinToString("، "))
+                    if (!ex.stdin.isNullOrEmpty()) Text(bidi("المدخلات: " + ex.stdin.joinToString("، ")))
                     runOut?.let {
                         CodeBox(listOf("الناتج: $it"))
                     }
@@ -308,7 +305,7 @@ private fun ExerciseView(
                 ) {
                     Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Text(
-                            if (ok) "✅ إجابة صحيحة! +${ex.xpReward} XP" else "❌ إجابة خاطئة",
+                            if (ok) "✅ إجابة صحيحة!" else "❌ إجابة خاطئة",
                             color = Color.Black,
                             style = MaterialTheme.typography.titleSmall
                         )
@@ -320,9 +317,9 @@ private fun ExerciseView(
                                 ExerciseType.BUG_FINDING -> ex.fixedLineText
                                 else -> ex.expectedOutput
                             }
-                            if (!correct.isNullOrBlank()) Text("الإجابة الصحيحة:\n$correct", color = Color.Black)
+                            if (!correct.isNullOrBlank()) Text(bidi("الإجابة الصحيحة:\n$correct"), color = Color.Black)
                         }
-                        ex.explanation?.let { Text(it, color = Color.Black) }
+                        ex.explanation?.let { Text(bidi(it), color = Color.Black) }
                     }
                 }
             }

@@ -83,7 +83,7 @@ fun AppRoot() {
     Scaffold(topBar = {
         Column {
             DevBanner()
-            TopAppBar(title = { Text(lesson?.title ?: selected?.title ?: "C++") })
+            TopAppBar(title = { Text(bidi(lesson?.title ?: selected?.title ?: "C++")) })
         }
     }) { padding ->
         Box(Modifier.padding(padding).fillMaxSize()) {
@@ -98,8 +98,8 @@ fun AppRoot() {
                     items(units) { u ->
                         Card(Modifier.fillMaxWidth().clickable { selected = u }) {
                             Column(Modifier.padding(16.dp)) {
-                                Text(u.title, style = MaterialTheme.typography.titleMedium)
-                                Text(u.description, style = MaterialTheme.typography.bodyMedium)
+                                Text(bidi(u.title), style = MaterialTheme.typography.titleMedium)
+                                Text(bidi(u.description), style = MaterialTheme.typography.bodyMedium)
                             }
                         }
                     }
@@ -114,7 +114,7 @@ fun AppRoot() {
                                 Modifier.padding(16.dp).fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(les.title, Modifier.weight(1f))
+                                Text(bidi(les.title), Modifier.weight(1f))
                                 if (les.id in completed) Text("✅")
                             }
                         }
