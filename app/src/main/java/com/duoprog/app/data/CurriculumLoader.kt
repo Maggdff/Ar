@@ -8,7 +8,7 @@ object CurriculumLoader {
     private var cache: List<CurriculumUnit>? = null
     private val fileNames = listOf(
         "unit_0.json", "unit_1.json", "unit_2.json",
-        "unit_3.json", "unit_4.json", "unit_5.json"
+        "unit_3.json", "unit_4.json"
     )
 
     fun load(context: Context): List<CurriculumUnit> {
