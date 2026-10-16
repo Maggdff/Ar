@@ -141,7 +141,7 @@ class CoreTest {
         // ملف قديم بلا حقل العدّ يُقرأ كـ -1
         val old = AttendanceFile.parse("UAT1\nD\tD1\t5\nS\ts1\t1\t1000\t15\n")!!
         assertEquals(-1, old.sessions[0].counted)
-        assertNull(AttendanceFile.parse("UAT1\nD\tD1\t5\nS\ts1\t1\t1000\t15\t3\t9\n"))
+        assertEquals(9, AttendanceFile.parse("UAT1\nD\tD1\t5\nS\ts1\t1\t1000\t15\t3\t9\n")!!.sessions[0].part)   // الحقل السادس = رقم المحاضرة في يومها
         assertEquals(0, AttendanceFile.parse("UAT1\nD\tD1\t5\nS\ts1\t1\t1000\t15\t0\n")!!.sessions[0].counted)
     }
 
