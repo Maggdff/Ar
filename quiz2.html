@@ -1,0 +1,252 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Introduction to Computer Quiz 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one narrow reading column; sticky status bar with progress; question cards; review state after submit. */
+:root{
+  --bg:#f3f5f8; --surface:#ffffff; --fg:#17202e; --muted:#5a6678; --line:#d9dfe8;
+  --accent:#1d4f91; --accent-fg:#ffffff; --accent-soft:#e3ecf8;
+  --good:#17703f; --good-soft:#e1f3e8; --bad:#b3261e; --bad-soft:#fbe6e4; --warn:#8a5a00; --warn-soft:#fbefd2;
+  --font-body:"IBM Plex Sans Arabic","Segoe UI",Tahoma,system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f151f; --surface:#171f2c; --fg:#e6ebf3; --muted:#9aa7ba; --line:#2a3546;
+    --accent:#6ea3ea; --accent-fg:#0b1422; --accent-soft:#1c2c45;
+    --good:#5fd08c; --good-soft:#14301f; --bad:#ff8a80; --bad-soft:#3a1a18; --warn:#f0c15a; --warn-soft:#352a0e;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f151f; --surface:#171f2c; --fg:#e6ebf3; --muted:#9aa7ba; --line:#2a3546;
+  --accent:#6ea3ea; --accent-fg:#0b1422; --accent-soft:#1c2c45;
+  --good:#5fd08c; --good-soft:#14301f; --bad:#ff8a80; --bad-soft:#3a1a18; --warn:#f0c15a; --warn-soft:#352a0e;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:16px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
+.wrap{max-width:760px;margin:0 auto}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line);
+  margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:10px max(16px,env(safe-area-inset-left,0px))}
+.bar-in{max-width:760px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.bar h1{font-size:15px;font-weight:600;margin:0;flex:1 1 220px;min-width:0;line-height:1.35}
+.bar h1 span{display:block;font-weight:400;color:var(--muted);font-size:12.5px}
+.count{font-family:var(--font-mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:7px 14px;font-weight:500;font-size:14px}
+.btn.primary{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.btn.warn{background:var(--warn-soft);color:var(--warn);border-color:var(--warn)}
+.btn:disabled{opacity:.5;cursor:default}
+.track{flex:1 0 100%;height:5px;background:var(--line);border-radius:3px;overflow:hidden}
+.fill{height:100%;width:0;background:var(--accent);transition:width .2s}
+
+.intro{margin:20px 0 12px;color:var(--muted);font-size:14.5px;display:grid;gap:4px}
+details.map{background:var(--surface);border:1px solid var(--line);border-radius:8px;margin:0 0 16px}
+details.map summary{padding:10px 14px;cursor:pointer;font-weight:500;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:6px;padding:4px 14px 14px}
+.grid button{border:1px solid var(--line);background:var(--bg);border-radius:5px;padding:5px 0;font-family:var(--font-mono);font-size:12px;font-variant-numeric:tabular-nums}
+.grid button.done{background:var(--accent-soft);border-color:var(--accent)}
+.grid button.ok{background:var(--good-soft);border-color:var(--good)}
+.grid button.no{background:var(--bad-soft);border-color:var(--bad)}
+.grid button.skip{background:var(--warn-soft);border-color:var(--warn)}
+
+#result{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;margin:0 0 16px;display:grid;gap:12px}
+.score{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
+.score b{font-size:40px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+.score span{color:var(--muted)}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{padding:6px 10px;text-align:start;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--muted);font-weight:500}
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.filters .btn[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent)}
+
+.q{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;margin:0 0 14px;scroll-margin-top:110px}
+.q.ok{border-color:var(--good)} .q.no{border-color:var(--bad)} .q.skip{border-color:var(--warn)}
+.meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px}
+.qid{font-family:var(--font-mono);font-size:12.5px;color:var(--muted)}
+.chip{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:1px 9px;color:var(--muted)}
+.d-easy{color:var(--good);border-color:var(--good)} .d-medium{color:var(--accent);border-color:var(--accent)}
+.d-hard{color:var(--warn);border-color:var(--warn)} .d-vhard{color:var(--bad);border-color:var(--bad)}
+.verdict{margin-inline-start:auto;font-size:13px;font-weight:600}
+.q.ok .verdict{color:var(--good)} .q.no .verdict{color:var(--bad)} .q.skip .verdict{color:var(--warn)}
+.qa{font-size:18px;font-weight:600;margin:0 0 4px;line-height:1.6;text-wrap:balance;overflow-wrap:anywhere}
+.qe{margin:0 0 12px;color:var(--muted);font-size:15px;overflow-wrap:anywhere}
+.opts{display:grid;gap:8px}
+.opt{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;border:1px solid var(--line);border-radius:8px;padding:9px 12px;cursor:pointer;background:var(--bg)}
+.opt:hover{border-color:var(--accent)}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt:has(input:focus-visible){outline:3px solid var(--accent);outline-offset:2px}
+.opt:has(input:checked){background:var(--accent-soft);border-color:var(--accent)}
+.letter{font-family:var(--font-mono);font-size:13px;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--muted);display:grid;place-items:center;color:var(--muted);margin-top:2px}
+.opt:has(input:checked) .letter{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.otext{display:grid;gap:1px;min-width:0}
+.oa{overflow-wrap:anywhere} .oe{color:var(--muted);font-size:14.5px;overflow-wrap:anywhere}
+.locked .opt{cursor:default}
+.locked .opt:hover{border-color:var(--line)}
+.opt.right{background:var(--good-soft);border-color:var(--good)}
+.opt.right .letter{background:var(--good);border-color:var(--good);color:var(--bg)}
+.opt.wrong{background:var(--bad-soft);border-color:var(--bad)}
+.opt.wrong .letter{background:var(--bad);border-color:var(--bad);color:var(--bg)}
+.expl{margin-top:12px;border-top:1px dashed var(--line);padding-top:10px;display:grid;gap:4px;font-size:14.5px}
+.expl .src{font-size:12.5px;color:var(--muted)}
+.foot{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;margin-top:20px}
+.note{color:var(--muted);font-size:13.5px}
+</style>
+
+<div class="bar"><div class="bar-in">
+  <h1>مقدمة في الحاسوب · الاختبار 2<span>Introduction to Computer · Quiz 2 of 2</span></h1>
+  <span class="count" id="cnt">0 / 0</span>
+  <button class="btn primary" id="submitTop" type="button">إنهاء وعرض النتيجة · Finish</button>
+  <div class="track"><div class="fill" id="fill"></div></div>
+</div></div>
+
+<main class="wrap">
+  <div class="intro">
+    <span dir="rtl" lang="ar">اختر إجابة واحدة لكل سؤال. يظهر التصحيح والشرح فور اختيار الإجابة، ولا يمكن تغييرها بعد ذلك. اضغط «إنهاء» لعرض النتيجة النهائية. تُحفظ إجاباتك في هذا المتصفح.</span>
+    <span dir="ltr" lang="en">Choose one answer per question. The correction and explanation appear right after you pick an answer, and it cannot be changed afterwards. Press “Finish” to see your final score. Your answers are kept in this browser.</span>
+  </div>
+  <details class="map" id="mapBox"><summary>خريطة الأسئلة · Question map</summary><div class="grid" id="grid"></div></details>
+  <section id="result" hidden aria-live="polite"></section>
+  <div id="list"></div>
+  <div class="foot">
+    <span class="note" id="foot-note"></span>
+    <button class="btn primary" id="submitBot" type="button">إنهاء وعرض النتيجة · Finish</button>
+  </div>
+</main>
+
+<script>
+(function(){
+  var PART=2;
+  var DATA=[{"id":"Q001","a":"ما الهدف الأساسي لشبكة الحاسوب؟","e":"What is the primary purpose of a computer network?","o":[["تبادل البيانات والمعلومات ومشاركة الموارد","Exchanging data and information and sharing resources"],["زيادة سعة RAM لكل جهاز تلقائيًا","Automatically increasing each device's RAM"],["استبدال أنظمة التشغيل","Replacing operating systems"],["تحويل كل الأجهزة إلى خوادم","Turning all devices into servers"]],"k":0,"d":"سهل","de":"Easy","t":"Computer networks","xa":"الشبكة تربط الأجهزة لتبادل البيانات ومشاركة الملفات والطابعات والخدمات.","xe":"A network connects devices to exchange data and share files, printers, and services.","s":"Printed p. 33 / PDF p. 34 (Chapter 5)"},{"id":"Q002","a":"ما وظيفة بطاقة الشبكة NIC؟","e":"What is the function of a Network Interface Card (NIC)?","o":[["تمكين الجهاز من الاتصال بالشبكة","Enabling a device to connect to a network"],["حساب المتوسط الحسابي","Calculating an arithmetic average"],["عرض الفيديو على الشاشة","Displaying video on a screen"],["حفظ الملفات على المدى الطويل فقط","Only storing files long-term"]],"k":0,"d":"سهل","de":"Easy","t":"NIC","xa":"تتيح NIC اتصال الجهاز بالشبكة وقد تكون مدمجة أو خارجية.","xe":"A NIC enables network connectivity and may be integrated or external.","s":"Printed p. 34 / PDF p. 35 (Chapter 5)"},{"id":"Q003","a":"أي مثال يناسب LAN؟","e":"Which example fits a LAN?","o":[["الإنترنت العالمي كله","The entire global internet"],["شبكة عالمية بين قارات","A global intercontinental network"],["شبكة تربط دولًا متعددة","A network connecting multiple countries"],["شبكة مختبر حاسوب في جامعة","A computer-lab network at a university"]],"k":3,"d":"سهل","de":"Easy","t":"LAN","xa":"LAN تغطي نطاقًا جغرافيًا محدودًا مثل المنزل أو المكتب أو المختبر.","xe":"A LAN covers a limited area such as a home, office, or lab.","s":"Printed p. 35 / PDF p. 36 (Chapter 5)"},{"id":"Q004","a":"ما الوصف الأنسب لـ WAN؟","e":"Which description best fits a WAN?","o":[["شبكة داخل غرفة واحدة فقط","A network limited to one room"],["شبكة تمتد لمسافات جغرافية كبيرة وقد تربط مدنًا أو دولًا","A network spanning large geographic distances and possibly connecting cities or countries"],["نوع من وحدات المعالجة","A type of processing unit"],["برنامج لإنشاء مستندات","A document-creation program"]],"k":1,"d":"سهل","de":"Easy","t":"WAN","xa":"WAN تربط شبكات أو مواقع بعيدة جغرافيًا.","xe":"A WAN connects geographically distant networks or locations.","s":"Printed p. 35 / PDF p. 36 (Chapter 5)"},{"id":"Q005","a":"ما المقصود بالإنترانت؟","e":"What is an intranet?","o":[["شبكة عامة متاحة لكل العالم بالضرورة","A public network necessarily open to everyone"],["شبكة داخلية تستخدم تقنيات الإنترنت داخل مؤسسة","An internal network using internet technologies within an organization"],["وسيط تخزين محمول","A portable storage medium"],["جهاز يربط شبكتين","A device connecting two networks"]],"k":1,"d":"سهل","de":"Easy","t":"Intranet","xa":"الإنترانت توفر خدمات ومعلومات داخلية لموظفي المؤسسة.","xe":"An intranet provides internal services and information to an organization's staff.","s":"Printed p. 36 / PDF p. 37 (Chapter 5)"},{"id":"Q006","a":"ما الذي يميز Extranet عن Intranet؟","e":"What distinguishes an extranet from an intranet?","o":[["تسمح لأشخاص خارجيين مصرح لهم بالوصول إلى جزء محدد من الموارد","It allows authorized outsiders to access a limited part of resources"],["لا تستخدم أي تقنيات إنترنت","It uses no internet technologies"],["هي دائمًا شبكة لاسلكية قصيرة المدى","It is always a short-range wireless network"],["تمنع جميع المستخدمين الداخليين","It blocks all internal users"]],"k":0,"d":"سهل","de":"Easy","t":"Extranet","xa":"الإكسترانت تتيح وصولًا محدودًا ومصرحًا به من خارج المؤسسة.","xe":"An extranet provides authorized, limited access to resources from outside the organization.","s":"Printed p. 36 / PDF p. 37 (Chapter 5)"},{"id":"Q007","a":"ما السمة الأساسية لطوبولوجيا Bus؟","e":"What is the main characteristic of bus topology?","o":[["اتصال كل جهاز بجهاز مركزي","Each device connects to a central device"],["اتصال الأجهزة بكابل رئيسي واحد","Devices connect to one main cable"],["اتصال الأجهزة في حلقة","Devices connect in a ring"],["اتصال كل جهاز بكل الأجهزة مباشرة","Every device connects directly to every other device"]],"k":1,"d":"سهل","de":"Easy","t":"Bus topology","xa":"في Bus تتصل الأجهزة بكابل رئيسي واحد، وتعطله يؤثر على الشبكة.","xe":"In bus topology, devices share one main cable; failure of that cable affects the network.","s":"Printed p. 37 / PDF p. 38 (Chapter 5)"},{"id":"Q008","a":"ما العيب الرئيسي للطوبولوجيا النجمية؟","e":"What is the main drawback of star topology?","o":[["لا تحتاج إلى أي كابلات أو اتصال","It needs no cables or connectivity"],["إضافة جهاز جديد سهلة جدًا","Adding a device is easy"],["عطل جهاز طرفي يوقف دائمًا كل الشبكة","Failure of one endpoint always stops the entire network"],["تعطل الجهاز المركزي يؤثر على الأجهزة المتصلة","Failure of the central device affects connected devices"]],"k":3,"d":"سهل","de":"Easy","t":"Star topology","xa":"تعتمد الأجهزة في Star على جهاز مركزي، لذلك قد يؤثر تعطله على الشبكة.","xe":"Star devices depend on a central device, so its failure can affect the network.","s":"Printed p. 38 / PDF p. 39 (Chapter 5)"},{"id":"Q009","a":"ما وظيفة Switch المذكورة؟","e":"What function is given for a switch?","o":[["ربط الشبكات المختلفة وتوجيه البيانات بينها","Connecting different networks and routing data between them"],["ربط الأجهزة داخل الشبكة المحلية","Connecting devices within a local network"],["توفير بيئة واقع افتراضي","Providing a virtual-reality environment"],["إدارة قواعد البيانات","Managing databases"]],"k":1,"d":"سهل","de":"Easy","t":"Switch","xa":"السويتش يربط الأجهزة داخل LAN، بينما الراوتر يربط الشبكات ويوجه البيانات.","xe":"A switch connects devices within a LAN, while a router connects networks and routes data.","s":"Printed p. 39 / PDF p. 40 (Chapter 5)"},{"id":"Q010","a":"ما المقصود ببروتوكول الشبكة؟","e":"What is a network protocol?","o":[["مجموعة قواعد تنظم تبادل البيانات بين الأجهزة","A set of rules governing data exchange between devices"],["عنوان رقمي للجهاز فقط","Only a numeric device address"],["نوع كابل رئيسي","A type of main cable"],["برنامج عروض تقديمية","Presentation software"]],"k":0,"d":"سهل","de":"Easy","t":"Protocol","xa":"البروتوكولات قواعد متفق عليها لإرسال البيانات واستقبالها.","xe":"Protocols are agreed rules for sending and receiving data.","s":"Printed p. 39 / PDF p. 40 (Chapter 5)"},{"id":"Q011","a":"ما الغرض من عنوان IP؟","e":"What is the purpose of an IP address?","o":[["ضغط ملفات الفيديو","Compressing video files"],["تحديد امتداد ملف Word","Identifying a Word-file extension"],["تمييز جهاز أو واجهة شبكة ضمن شبكة تستخدم IP","Identifying a device or network interface on an IP network"],["زيادة سرعة المعالج","Increasing CPU speed"]],"k":2,"d":"سهل","de":"Easy","t":"IP address","xa":"عنوان IP رقمي يساعد على توجيه البيانات إلى الوجهة المناسبة.","xe":"An IP address helps direct data to the appropriate destination.","s":"Printed p. 40 / PDF p. 41 (Chapter 5)"},{"id":"Q012","a":"ما الفرق الصحيح بين Internet وWorld Wide Web؟","e":"What is the correct difference between the Internet and the World Wide Web?","o":[["الويب هو جهاز مادي والإنترنت برنامج","The Web is hardware and the Internet is software"],["المصطلحان متطابقان تمامًا","The terms are exactly identical"],["الإنترنت بنية الشبكات العالمية، والويب خدمة تعمل فوقها","The Internet is the global network infrastructure; the Web is a service running on it"],["الإنترنت برنامج متصفح والويب محرك بحث","The Internet is a browser and the Web is a search engine"]],"k":2,"d":"سهل","de":"Easy","t":"Internet vs Web","xa":"الويب إحدى الخدمات التي تعمل عبر الإنترنت وليس مرادفًا له.","xe":"The Web is one service running over the Internet, not a synonym for it.","s":"Printed p. 42 / PDF p. 43 (Chapter 6)"},{"id":"Q013","a":"ما وظيفة متصفح الويب؟","e":"What does a web browser do?","o":[["ربط الأجهزة بكابل رئيسي","Connecting devices with a main cable"],["ترميز الحروف فقط","Only encoding characters"],["إدارة قواعد البيانات فقط","Only managing databases"],["الوصول إلى صفحات الويب وعرضها","Accessing and displaying web pages"]],"k":3,"d":"سهل","de":"Easy","t":"Browser","xa":"Chrome وEdge وFirefox أمثلة على متصفحات الويب.","xe":"Chrome, Edge, and Firefox are examples of web browsers.","s":"Printed p. 42 / PDF p. 43 (Chapter 6)"},{"id":"Q014","a":"أي مما يلي خدمة محرك بحث؟","e":"Which of the following is a search-engine service?","o":[["Bing","Bing"],["Android","Android"],["Microsoft Word","Microsoft Word"],["Firefox","Firefox"]],"k":0,"d":"سهل","de":"Easy","t":"Search engine","xa":"Bing وGoogle وDuckDuckGo أمثلة لمحركات البحث، بينما Firefox متصفح.","xe":"Bing, Google, and DuckDuckGo are search engines, while Firefox is a browser.","s":"Printed p. 43 / PDF p. 44 (Chapter 6)"},{"id":"Q015","a":"ما الجزء الذي يحدد مسار الصفحة أو المورد داخل URL؟","e":"Which part identifies the page or resource path in a URL?","o":[["File extension only","File extension only"],["Path","Path"],["Protocol","Protocol"],["Domain Name","Domain name"]],"k":1,"d":"سهل","de":"Easy","t":"URL","xa":"توضح الملزمة أن URL قد يتضمن Protocol وDomain وPath.","xe":"The notes explain that a URL may contain a protocol, domain, and path.","s":"Printed p. 44 / PDF p. 45 (Chapter 6)"},{"id":"Q016","a":"لماذا يستخدم اسم النطاق؟","e":"Why is a domain name used?","o":[["لتسهيل الوصول إلى الموقع بدل حفظ عنوان IP الرقمي","To make a site easier to access than memorizing its numeric IP address"],["لضغط الصوت","To compress audio"],["لتخزين RAM","To store RAM"],["لتبريد الخادم","To cool a server"]],"k":0,"d":"سهل","de":"Easy","t":"Domain Name","xa":"اسم النطاق اسم سهل الاستخدام للوصول إلى موقع بدل العنوان الرقمي.","xe":"A domain name is an easy-to-use name for reaching a site instead of a numeric address.","s":"Printed p. 44 / PDF p. 45 (Chapter 6)"},{"id":"Q017","a":"ما وظيفة خادم الويب؟","e":"What does a web server do?","o":[["يستقبل طلبات المستخدمين ويرسل صفحات وموارد الويب المطلوبة","Receives user requests and sends the requested web pages and resources"],["يحوّل كل المواقع إلى أسماء نطاقات","Converts all sites into domain names"],["يعمل كجهاز إدخال صوتي","Acts as an audio input device"],["ينفذ عمليات ALU فقط","Performs only ALU operations"]],"k":0,"d":"سهل","de":"Easy","t":"Web server","xa":"خادم الويب يعالج الطلبات ويرسل موارد الويب المطلوبة.","xe":"A web server handles requests and sends requested web resources.","s":"Printed p. 45 / PDF p. 46 (Chapter 6)"},{"id":"Q018","a":"أي عنصر من العناصر الأساسية للبريد الإلكتروني؟","e":"Which is a basic element of email?","o":[["Topology","Topology"],["CPU Socket","CPU socket"],["Primary Key","Primary key"],["Subject","Subject"]],"k":3,"d":"سهل","de":"Easy","t":"Email","xa":"تتضمن عناصر البريد المرسل والمستقبل والموضوع والرسالة والمرفق.","xe":"Email elements include sender, receiver, subject, message, and attachment.","s":"Printed p. 45 / PDF p. 46 (Chapter 6)"},{"id":"Q019","a":"ما فائدة التخزين السحابي المذكورة؟","e":"Which benefit of cloud storage is mentioned?","o":[["الوصول دون أي اتصال شبكي في جميع الحالات","Access without any network connection in all cases"],["الوصول إلى الملفات من أجهزة مختلفة عبر الإنترنت","Accessing files from different devices over the internet"],["زيادة دقة الشاشة","Increasing display resolution"],["إلغاء الحاجة إلى ملفات","Eliminating the need for files"]],"k":1,"d":"سهل","de":"Easy","t":"Cloud storage","xa":"تتيح الخدمات السحابية تخزين الملفات على خوادم متصلة بالإنترنت والوصول إليها من أجهزة متعددة.","xe":"Cloud services store files on internet-connected servers and allow access from multiple devices.","s":"Printed p. 45 / PDF p. 46 (Chapter 6)"},{"id":"Q020","a":"ما الإجراء الذي توصي به الملزمة لتعزيز أمان الحساب؟","e":"Which action do the notes recommend to improve account security?","o":[["تفعيل المصادقة متعددة العوامل عند توفرها","Enabling multi-factor authentication when available"],["مشاركة المعلومات الشخصية مع جهات مجهولة","Sharing personal information with unknown parties"],["فتح الروابط المشبوهة بسرعة","Opening suspicious links quickly"],["إهمال تحديث النظام","Ignoring system updates"]],"k":0,"d":"سهل","de":"Easy","t":"Safe internet use","xa":"توصي الملزمة بكلمات مرور قوية وMFA والحذر من التصيد وتحديث البرامج.","xe":"The notes recommend strong passwords, MFA, phishing awareness, and software updates.","s":"Printed p. 47 / PDF p. 48 (Chapter 6)"},{"id":"Q021","a":"ما المهمة الأساسية لبرامج معالجة النصوص؟","e":"What is the main task of word-processing software?","o":[["إنشاء مفاتيح قواعد البيانات تلقائيًا فقط","Only automatically creating database keys"],["إنشاء المستندات وتحريرها وتنسيقها","Creating, editing, and formatting documents"],["توجيه البيانات بين الشبكات","Routing data between networks"],["تحليل حزم الشبكة فقط","Only analyzing network packets"]],"k":1,"d":"سهل","de":"Easy","t":"Word processing","xa":"Word وGoogle Docs مثالان على معالجة النصوص.","xe":"Word and Google Docs are examples of word-processing software.","s":"Printed p. 49 / PDF p. 50 (Chapter 7)"},{"id":"Q022","a":"أي مهمة تناسب الجداول الإلكترونية؟","e":"Which task suits spreadsheets?","o":[["تنظيم البيانات وإجراء الحسابات وتحليلها","Organizing, calculating, and analyzing data"],["التقاط الصوت","Capturing sound"],["عرض نظام تشغيل فقط","Only displaying an operating system"],["ربط الأجهزة في طوبولوجيا Ring","Connecting devices in a ring topology"]],"k":0,"d":"سهل","de":"Easy","t":"Spreadsheets","xa":"Excel وGoogle Sheets يستخدمان للجداول والدوال والمخططات وترتيب البيانات.","xe":"Excel and Google Sheets support tables, functions, charts, and data sorting.","s":"Printed p. 49 / PDF p. 50 (Chapter 7)"},{"id":"Q023","a":"ما الغرض من برامج العروض التقديمية؟","e":"What is the purpose of presentation software?","o":[["عرض المعلومات بصورة منظمة ومرئية","Presenting information in an organized visual form"],["تخزين Firmware فقط","Only storing firmware"],["تنفيذ دور الراوتر","Acting as a router"],["إدارة ذاكرة RAM","Managing RAM"]],"k":0,"d":"سهل","de":"Easy","t":"Presentation software","xa":"PowerPoint وGoogle Slides أمثلة لبرامج العروض.","xe":"PowerPoint and Google Slides are presentation tools.","s":"Printed p. 50 / PDF p. 51 (Chapter 7)"},{"id":"Q024","a":"أي عملية تعني تغيير اسم ملف دون تغيير المقصود بمحتواه؟","e":"Which operation changes a file's name without intending to change its content?","o":[["Delete","Delete"],["Rename","Rename"],["Compress","Compress"],["Print","Print"]],"k":1,"d":"سهل","de":"Easy","t":"File management","xa":"إعادة التسمية Rename من عمليات إدارة الملفات الأساسية.","xe":"Rename is a basic file-management operation.","s":"Printed p. 51 / PDF p. 52 (Chapter 7)"},{"id":"Q025","a":"أي فائدة ترتبط بالتخزين والمشاركة السحابية؟","e":"Which benefit is associated with cloud storage and sharing?","o":[["استبدال جميع أنظمة التشغيل","Replacing all operating systems"],["منع الوصول من أجهزة مختلفة","Preventing access from different devices"],["إلغاء صلاحيات المشاركة دائمًا","Always eliminating sharing permissions"],["التعاون على المستندات ومشاركتها","Collaborating on and sharing documents"]],"k":3,"d":"سهل","de":"Easy","t":"Cloud collaboration","xa":"تسمح الخدمات السحابية بالمشاركة والتعاون والوصول من أماكن مختلفة.","xe":"Cloud services support sharing, collaboration, and access from different places.","s":"Printed p. 51 / PDF p. 52 (Chapter 7)"},{"id":"Q026","a":"ما المقصود بالإنتاجية الرقمية؟","e":"What does digital productivity mean?","o":[["استخدام التقنية دون تنظيم","Using technology without organization"],["العمل دون حفظ الملفات","Working without saving files"],["استخدام الحاسوب والتقنيات الرقمية لإنجاز العمل بكفاءة وتنظيم أفضل","Using computers and digital technologies to work efficiently and stay organized"],["زيادة عدد الملفات المكررة","Increasing duplicate files"]],"k":2,"d":"سهل","de":"Easy","t":"Digital productivity","xa":"الإنتاجية الرقمية تعني إنجاز الأعمال بكفاءة وتنظيم أفضل.","xe":"Digital productivity means completing work efficiently and with better organization.","s":"Printed p. 52 / PDF p. 53 (Chapter 7)"},{"id":"Q027","a":"ما تعريف الوسائط المتعددة؟","e":"What is multimedia?","o":[["ربط شبكتين باستخدام راوتر","Connecting two networks with a router"],["استخدام أكثر من نوع من الوسائط لتقديم المعلومات في بيئة رقمية واحدة","Using more than one media type to present information in one digital environment"],["استخدام النص فقط دون أي وسيط آخر","Using text only and no other media"],["تخزين قواعد البيانات فقط","Only storing databases"]],"k":1,"d":"سهل","de":"Easy","t":"Multimedia","xa":"قد تجمع الوسائط المتعددة النصوص والصور والصوت والفيديو والرسوم المتحركة.","xe":"Multimedia can combine text, images, audio, video, and animation.","s":"Printed p. 54 / PDF p. 55 (Chapter 8)"},{"id":"Q028","a":"أي صيغة صور تدعم الشفافية وفق الملزمة؟","e":"Which image format supports transparency according to the notes?","o":[["MP3","MP3"],["PNG","PNG"],["WAV","WAV"],["MP4","MP4"]],"k":1,"d":"سهل","de":"Easy","t":"Image formats","xa":"تذكر الملزمة أن PNG للصور والرسومات مع دعم الشفافية.","xe":"The notes describe PNG as supporting transparency for images and graphics.","s":"Printed p. 55 / PDF p. 56 (Chapter 8)"},{"id":"Q029","a":"أي مما يلي صيغة صوت رقمي؟","e":"Which of the following is a digital-audio format?","o":[["WebM","WebM"],["DOCX","DOCX"],["WAV","WAV"],["JPEG","JPEG"]],"k":2,"d":"سهل","de":"Easy","t":"Audio formats","xa":"من صيغ الصوت المذكورة MP3 وWAV وAAC.","xe":"The listed audio formats include MP3, WAV, and AAC.","s":"Printed p. 55 / PDF p. 56 (Chapter 8)"},{"id":"Q030","a":"أي صيغة من التالية مذكورة للفيديو الرقمي؟","e":"Which format is listed for digital video?","o":[["WebM","WebM"],["PNG","PNG"],["AAC","AAC"],["XLSX","XLSX"]],"k":0,"d":"سهل","de":"Easy","t":"Video formats","xa":"من صيغ الفيديو المذكورة MP4 وMOV وAVI وWebM.","xe":"The listed video formats include MP4, MOV, AVI, and WebM.","s":"Printed p. 56 / PDF p. 57 (Chapter 8)"},{"id":"Q031","a":"أي مثال يوضح التفاعل في الوسائط المتعددة؟","e":"Which example illustrates interactivity in multimedia?","o":[["تخصيص ذاكرة للبرنامج","Allocating memory to a program"],["مشاهدة صورة ثابتة فقط دون أي تفاعل","Only viewing a static image without interaction"],["اختيار قائمة أو تشغيل الفيديو وإيقافه","Selecting a menu or playing and pausing a video"],["تغيير عنوان IP تلقائيًا","Automatically changing an IP address"]],"k":2,"d":"سهل","de":"Easy","t":"Interactivity","xa":"التفاعل يسمح للمستخدم بالضغط والاختيار والتحكم في المحتوى.","xe":"Interactivity lets users click, choose, and control content.","s":"Printed p. 56 / PDF p. 57 (Chapter 8)"},{"id":"Q032","a":"ما قاعدة البيانات؟","e":"What is a database?","o":[["شبكة كابل رئيسي","A main-cable network"],["مجموعة منظمة من البيانات يمكن الوصول إليها وإدارتها وتحديثها","An organized collection of data that can be accessed, managed, and updated"],["مجموعة تعليمات للمعالج فقط","Only a set of CPU instructions"],["جهاز إخراج ورقي","A paper-output device"]],"k":1,"d":"سهل","de":"Easy","t":"Database","xa":"قاعدة البيانات تنظم البيانات لتسهيل الوصول والإدارة والتحديث.","xe":"A database organizes data to make access, management, and updates easier.","s":"Printed p. 58 / PDF p. 59 (Chapter 9)"},{"id":"Q033","a":"ما وظيفة DBMS؟","e":"What is the function of a DBMS?","o":[["إنشاء قواعد البيانات وإدارتها والتعامل مع بياناتها","Creating and managing databases and working with their data"],["تسجيل الصوت","Recording audio"],["تبريد CPU","Cooling the CPU"],["عرض صفحات الويب فقط","Only displaying web pages"]],"k":0,"d":"سهل","de":"Easy","t":"DBMS","xa":"DBMS برنامج لإدارة قاعدة البيانات، مثل MySQL وAccess.","xe":"A DBMS manages databases; examples include MySQL and Access.","s":"Printed p. 58 / PDF p. 59 (Chapter 9)"},{"id":"Q034","a":"ما الذي يمثله Record في جدول قاعدة البيانات؟","e":"What does a record represent in a database table?","o":[["مجموعة بيانات تخص عنصرًا واحدًا","A set of data about one item"],["نوع محدد من البيانات داخل الجدول","A specific data type within a table"],["الجدول كله بالضرورة","Necessarily the entire table"],["برنامج إدارة قاعدة البيانات","The database-management program"]],"k":0,"d":"سهل","de":"Easy","t":"Record","xa":"السجل يمثل بيانات عنصر واحد، والحقل يمثل نوعًا محددًا من البيانات.","xe":"A record represents one item; a field represents a specific data type.","s":"Printed p. 59 / PDF p. 60 (Chapter 9)"},{"id":"Q035","a":"ما وظيفة المفتاح الأساسي Primary Key؟","e":"What is the function of a primary key?","o":[["حذف جميع السجلات المتكررة تلقائيًا","Automatically deleting all duplicate records"],["تخزين الصور في السحابة","Storing images in the cloud"],["ربط جدولين دائمًا دون تمييز السجلات","Always linking two tables without identifying records"],["تمييز كل سجل في الجدول بصورة فريدة","Uniquely identifying each record in a table"]],"k":3,"d":"سهل","de":"Easy","t":"Primary key","xa":"المفتاح الأساسي يميز كل سجل بشكل فريد، مثل Student_ID.","xe":"A primary key uniquely identifies each record, such as Student_ID.","s":"Printed p. 60 / PDF p. 61 (Chapter 9)"},{"id":"Q036","a":"ما وظيفة المفتاح الأجنبي Foreign Key؟","e":"What is the function of a foreign key?","o":[["تمييز كل سجل داخل الجدول بصورة فريدة بالضرورة","Necessarily uniquely identifying every record in a table"],["تنفيذ العمليات الحسابية في CPU","Performing CPU arithmetic"],["تغيير امتداد الملف","Changing a file extension"],["ربط جدول بجدول آخر","Linking one table to another"]],"k":3,"d":"سهل","de":"Easy","t":"Foreign key","xa":"المفتاح الأجنبي يستخدم للربط بين الجداول، مثل Student_ID في جدول الدرجات.","xe":"A foreign key links tables, such as Student_ID in a grades table.","s":"Printed p. 60 / PDF p. 61 (Chapter 9)"},{"id":"Q037","a":"إلى ماذا يشير الحرف U في CRUD؟","e":"What does the U in CRUD stand for?","o":[["Upload — رفع","Upload"],["Understand — فهم","Understand"],["Update — تحديث","Update"],["Undo — تراجع","Undo"]],"k":2,"d":"سهل","de":"Easy","t":"CRUD","xa":"CRUD هي Create وRead وUpdate وDelete.","xe":"CRUD stands for Create, Read, Update, and Delete.","s":"Printed p. 60 / PDF p. 61 (Chapter 9)"},{"id":"Q038","a":"ما المقصود بالذكاء الاصطناعي في الملزمة؟","e":"How do the notes define artificial intelligence?","o":[["نوع من وحدات التخزين","A type of storage device"],["مجال يطور أنظمة تنفذ مهامًا تتطلب عادةً بعض القدرات البشرية","A field developing systems that perform tasks usually requiring some human abilities"],["شبكة محلية صغيرة","A small local network"],["لغة ترميز للصور فقط","An image-only encoding language"]],"k":1,"d":"سهل","de":"Easy","t":"AI","xa":"تشمل المهام التعلم من البيانات وفهم اللغة والتعرف على الصور وتحليل المعلومات.","xe":"Tasks include learning from data, understanding language, recognizing images, and analyzing information.","s":"Printed p. 62 / PDF p. 63 (Chapter 10)"},{"id":"Q039","a":"ما العلاقة بين تعلم الآلة والذكاء الاصطناعي؟","e":"What is the relationship between machine learning and AI?","o":[["الذكاء الاصطناعي فرع من تعلم الآلة فقط","AI is only a branch of machine learning"],["تعلم الآلة أحد فروع الذكاء الاصطناعي","Machine learning is a branch of AI"],["تعلم الآلة هو نوع من أجهزة الإدخال","Machine learning is an input device"],["المجالان لا علاقة بينهما","The fields are unrelated"]],"k":1,"d":"سهل","de":"Easy","t":"Machine Learning","xa":"توضح الملزمة أن تعلم الآلة فرع من الذكاء الاصطناعي ويتعلم من البيانات.","xe":"The notes state that machine learning is a branch of AI and learns from data.","s":"Printed p. 63 / PDF p. 64 (Chapter 10)"},{"id":"Q040","a":"على ماذا يعتمد التعلم العميق؟","e":"What does deep learning rely on?","o":[["أقراص HDD دوارة","Spinning HDD disks"],["امتدادات الملفات","File extensions"],["طوبولوجيا Bus","Bus topology"],["الشبكات العصبية الاصطناعية ذات الطبقات المتعددة","Artificial neural networks with multiple layers"]],"k":3,"d":"سهل","de":"Easy","t":"Deep learning","xa":"التعلم العميق أسلوب من تعلم الآلة يعتمد على شبكات عصبية متعددة الطبقات.","xe":"Deep learning is an ML approach based on multilayer artificial neural networks.","s":"Printed p. 63 / PDF p. 64 (Chapter 10)"},{"id":"Q041","a":"أي تطبيق يرتبط بمعالجة اللغة الطبيعية NLP؟","e":"Which application is associated with natural language processing (NLP)?","o":[["الترجمة الآلية وروبوتات المحادثة","Machine translation and chatbots"],["ضغط القرص الصلب","Hard-disk compression"],["توجيه حزم الشبكة فقط","Only routing network packets"],["تبريد المعالج","CPU cooling"]],"k":0,"d":"سهل","de":"Easy","t":"NLP","xa":"NLP يهتم بتعامل الحاسوب مع اللغة البشرية، مثل الترجمة وتحليل النصوص.","xe":"NLP concerns computer processing of human language, including translation and text analysis.","s":"Printed p. 64 / PDF p. 65 (Chapter 10)"},{"id":"Q042","a":"ما المجال الذي يحلل الصور والفيديو ويفهمهما؟","e":"Which field analyzes and interprets images and video?","o":[["الحوسبة السحابية فقط","Cloud computing only"],["إدارة الملفات","File management"],["معالجة النصوص","Word processing"],["الرؤية الحاسوبية Computer Vision","Computer vision"]],"k":3,"d":"سهل","de":"Easy","t":"Computer vision","xa":"الرؤية الحاسوبية تشمل التعرف على الوجوه واكتشاف الأشياء وتحليل الفيديو.","xe":"Computer vision includes face recognition, object detection, and video analysis.","s":"Printed p. 64 / PDF p. 65 (Chapter 10)"},{"id":"Q043","a":"ما الذي يميز الذكاء الاصطناعي التوليدي؟","e":"What distinguishes generative AI?","o":[["توجيه البيانات بين الشبكات فقط","Only routing data between networks"],["منع إنشاء أي محتوى","Preventing all content creation"],["إنشاء محتوى جديد اعتمادًا على الأنماط المتعلمة من البيانات","Creating new content based on patterns learned from data"],["حفظ الملفات دون معالجتها","Storing files without processing them"]],"k":2,"d":"سهل","de":"Easy","t":"Generative AI","xa":"يمكن للذكاء التوليدي المساعدة في إنشاء النصوص والصور والصوت والفيديو والبرمجيات.","xe":"Generative AI can help create text, images, audio, video, and software.","s":"Printed p. 65 / PDF p. 66 (Chapter 10)"},{"id":"Q044","a":"ما الإجراء المسؤول عند استخدام نتائج الذكاء الاصطناعي؟","e":"What is a responsible action when using AI outputs?","o":[["تجاهل حقوق الملكية الفكرية","Ignoring intellectual property rights"],["إدخال بيانات شخصية دائمًا","Always entering personal data"],["التحقق من صحة النتائج ومراجعتها","Verifying and reviewing the results"],["افتراض أن جميع النتائج صحيحة","Assuming every result is correct"]],"k":2,"d":"سهل","de":"Easy","t":"Responsible AI","xa":"توصي الملزمة بالتحقق وحماية الخصوصية وعدم الاعتماد على النتائج دون مراجعة.","xe":"The notes recommend verification, privacy protection, and not relying on outputs without review.","s":"Printed p. 65 / PDF p. 66 (Chapter 10)"},{"id":"Q045","a":"ما المقصود بالتقنيات الناشئة؟","e":"What are emerging technologies?","o":[["تقنيات حديثة أو متطورة يُتوقع أن يكون لها تأثير مهم مستقبلًا","New or developing technologies expected to have significant future impact"],["تقنيات توقفت عن الاستخدام حصرًا","Technologies that are exclusively obsolete"],["مكونات داخل CPU فقط","Only CPU components"],["أنواع الملفات النصية فقط","Text-file types only"]],"k":0,"d":"سهل","de":"Easy","t":"Emerging technology","xa":"تضم الأمثلة الحوسبة السحابية وإنترنت الأشياء والواقع الافتراضي والحوسبة الكمومية والروبوتات.","xe":"Examples include cloud computing, IoT, VR, quantum computing, and robotics.","s":"Printed p. 66 / PDF p. 67 (Chapter 11)"},{"id":"Q046","a":"ما المقصود بالحوسبة السحابية؟","e":"What is cloud computing?","o":[["استخدام موارد حوسبية مثل التخزين والبرمجيات والخوادم عبر الإنترنت","Using computing resources such as storage, software, and servers over the internet"],["استخدام الجهاز المحلي فقط دون اتصال","Using only a local device without connectivity"],["ترميز الحروف بالأرقام فقط","Encoding characters as numbers only"],["ربط الأجهزة في حلقة فقط","Connecting devices only in a ring"]],"k":0,"d":"سهل","de":"Easy","t":"Cloud computing","xa":"الحوسبة السحابية تتيح استخدام موارد عبر الإنترنت ومن أجهزة مختلفة.","xe":"Cloud computing provides resources over the internet and across different devices.","s":"Printed p. 67 / PDF p. 68 (Chapter 11)"},{"id":"Q047","a":"ما الفكرة الأساسية لإنترنت الأشياء IoT؟","e":"What is the core idea of the Internet of Things (IoT)?","o":[["ربط الأشياء والأجهزة بالإنترنت لتجمع البيانات وترسلها أو تستقبلها","Connecting objects and devices to the internet so they can collect, send, or receive data"],["استبدال كل البتات ببايتات","Replacing all bits with bytes"],["ربط الجداول بسجلات فقط","Linking tables only to records"],["إنشاء محتوى نصي فقط","Creating text content only"]],"k":0,"d":"سهل","de":"Easy","t":"IoT","xa":"تذكر الملزمة أمثلة مثل الساعات الذكية وأجهزة المنزل الذكي والحساسات.","xe":"The notes list smartwatches, smart-home devices, and sensors as examples.","s":"Printed p. 67 / PDF p. 68 (Chapter 11)"},{"id":"Q048","a":"ما المقصود بالواقع الافتراضي VR؟","e":"What is virtual reality (VR)?","o":[["ضغط ملف صوتي","Compressing an audio file"],["عرض صفحة ويب عادية فقط","Only displaying a normal web page"],["إنشاء بيئة رقمية يتفاعل معها المستخدم باستخدام أجهزة خاصة","Creating a digital environment users interact with using special devices"],["إدارة قاعدة بيانات","Managing a database"]],"k":2,"d":"سهل","de":"Easy","t":"Virtual Reality","xa":"يمكن استخدام نظارات VR في التعليم والتدريب والألعاب والمحاكاة.","xe":"VR headsets can be used for education, training, gaming, and simulation.","s":"Printed p. 68 / PDF p. 69 (Chapter 11)"},{"id":"Q049","a":"ما المجال الذي يهتم بتصميم وبرمجة آلات تنفذ مهام آليًا؟","e":"Which field focuses on designing and programming machines to perform tasks automatically?","o":[["Database Management","Database management"],["Search Engine","Search engine"],["الروبوتات Robotics","Robotics"],["Unicode","Unicode"]],"k":2,"d":"سهل","de":"Easy","t":"Robotics","xa":"تستخدم الروبوتات في المصانع والمستودعات والطب والاستكشاف والخدمات.","xe":"Robotics is used in factories, warehouses, medicine, exploration, and services.","s":"Printed p. 68 / PDF p. 69 (Chapter 11)"},{"id":"Q050","a":"ما الوحدة التي تستخدمها نماذج الحوسبة الكمومية بدل البتات التقليدية؟","e":"What unit do quantum-computing models use instead of traditional bits?","o":[["Qubits","Qubits"],["Records","Records"],["Pixels","Pixels"],["Bytes","Bytes"]],"k":0,"d":"سهل","de":"Easy","t":"Quantum computing","xa":"تذكر الملزمة أن الحواسيب الكمومية تستخدم Qubits، ولا تهدف إلى استبدال كل الحواسيب التقليدية.","xe":"The notes state that quantum computers use qubits and are not intended to replace all classical computers.","s":"Printed p. 68 / PDF p. 69 (Chapter 11)"},{"id":"Q051","a":"أي مما يلي تحدٍ مرتبط بالتقنيات الناشئة؟","e":"Which is a challenge associated with emerging technologies?","o":[["استحالة الحاجة إلى مهارات جديدة","Never needing new skills"],["عدم وجود أي تكلفة","Having no cost"],["اختفاء جميع المخاطر الأمنية","Elimination of all security risks"],["الخصوصية وحماية البيانات","Privacy and data protection"]],"k":3,"d":"سهل","de":"Easy","t":"Emerging-tech challenges","xa":"تذكر الملزمة الخصوصية والأمن والتكلفة والحاجة إلى مهارات جديدة والجوانب الأخلاقية.","xe":"The notes mention privacy, security, cost, new skills, and ethical issues.","s":"Printed p. 69 / PDF p. 70 (Chapter 11)"}];
+  var KEY="cq3-part-"+PART;
+  var L=["A","B","C","D"];
+  var DC={"سهل":"d-easy","متوسط":"d-medium","صعب":"d-hard","صعب جدًا":"d-vhard"};
+  var N=DATA.length, ans={}, submitted=false, filter="all", armed=false, armedReset=false;
+  var $=function(id){return document.getElementById(id)};
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+  function load(){try{var s=JSON.parse(localStorage.getItem(KEY)||"null");if(s&&s.a){ans=s.a;submitted=!!s.s}}catch(e){}}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify({a:ans,s:submitted}))}catch(e){}}
+
+  function build(){
+    var h="",g="";
+    DATA.forEach(function(q,i){
+      var opts=q.o.map(function(o,k){
+        return '<label class="opt"><input type="radio" name="q'+i+'" value="'+k+'" id="q'+i+'o'+k+'">'+
+          '<span class="letter">'+L[k]+'</span><span class="otext"><span class="oa" dir="rtl" lang="ar">'+esc(o[0])+
+          '</span><span class="oe" dir="ltr" lang="en">'+esc(o[1])+'</span></span></label>';
+      }).join("");
+      h+='<article class="q" id="q'+i+'" data-i="'+i+'"><div class="meta"><span class="qid">'+esc(q.id)+'</span>'+
+        '<span class="chip '+(DC[q.d]||"")+'">'+esc(q.d)+' · '+esc(q.de)+'</span>'+
+        '<span class="chip">'+esc(q.t)+'</span><span class="verdict"></span></div>'+
+        '<h2 class="qa" dir="rtl" lang="ar">'+esc(q.a)+'</h2><p class="qe" dir="ltr" lang="en">'+esc(q.e)+'</p>'+
+        '<div class="opts" role="radiogroup" aria-label="'+esc(q.id)+'">'+opts+'</div>'+
+        '<div class="expl" hidden><div dir="rtl" lang="ar"></div><div dir="ltr" lang="en"></div><div class="src"></div></div></article>';
+      g+='<button type="button" data-go="'+i+'" id="g'+i+'" aria-label="'+esc(q.id)+'">'+(i+1)+'</button>';
+    });
+    $("list").innerHTML=h; $("grid").innerHTML=g;
+  }
+
+  function paint(){
+    var done=0,right=0;
+    DATA.forEach(function(q,i){
+      var card=$("q"+i), has=ans[i]!==undefined, gb=$("g"+i);
+      var locked=submitted||has;
+      if(has){done++; if(ans[i]===q.k)right++;}
+      L.forEach(function(_,k){
+        var inp=$("q"+i+"o"+k); inp.checked=(ans[i]===k); inp.disabled=locked;
+        var lab=inp.parentNode; lab.classList.remove("right","wrong");
+        if(locked){ if(k===q.k)lab.classList.add("right"); else if(ans[i]===k)lab.classList.add("wrong"); }
+      });
+      card.classList.toggle("locked",locked);
+      card.classList.remove("ok","no","skip"); gb.className="";
+      var ex=card.querySelector(".expl"), vd=card.querySelector(".verdict");
+      if(locked){
+        var st=!has?"skip":(ans[i]===q.k?"ok":"no");
+        card.classList.add(st); gb.className=st;
+        vd.textContent=st==="ok"?"صحيح · Correct":st==="no"?"خطأ · Incorrect":"بلا إجابة · Unanswered";
+        var d=ex.children; d[0].textContent="الإجابة الصحيحة "+L[q.k]+": "+q.xa; d[1].textContent="Correct answer "+L[q.k]+": "+q.xe; d[2].textContent=q.s;
+        ex.hidden=false;
+      } else { vd.textContent=""; ex.hidden=true; }
+    });
+    $("cnt").textContent=done+" / "+N+" · ✓ "+right;
+    $("fill").style.width=(100*done/N)+"%";
+    $("foot-note").textContent=submitted?"":(N-done)+" متبقٍ · remaining";
+    ["submitTop","submitBot"].forEach(function(id){
+      var b=$(id); b.className="btn "+(submitted?"":"primary"); b.disabled=false;
+      b.textContent=submitted?"إعادة المحاولة · Retake":"إنهاء وعرض النتيجة · Finish";
+    });
+    applyFilter(); renderResult();
+  }
+
+  function renderResult(){
+    var r=$("result"); if(!submitted){r.hidden=true;return}
+    var ok=0,no=0,sk=0,by={};
+    DATA.forEach(function(q,i){
+      var k=q.d+"|"+q.de; by[k]=by[k]||{ar:q.d,en:q.de,n:0,ok:0};
+      by[k].n++;
+      if(ans[i]===undefined)sk++; else if(ans[i]===q.k){ok++;by[k].ok++} else no++;
+    });
+    var pct=Math.round(1000*ok/N)/10;
+    var rows=Object.keys(by).map(function(k){var b=by[k];
+      return "<tr><td>"+esc(b.ar)+" · "+esc(b.en)+"</td><td>"+b.ok+" / "+b.n+"</td><td>"+Math.round(100*b.ok/b.n)+"%</td></tr>"}).join("");
+    r.innerHTML='<div class="score"><b>'+ok+' / '+N+'</b><span>'+pct+'% · درجة واحدة لكل سؤال · 1 point per question</span></div>'+
+      '<div class="note">صحيح '+ok+' · خطأ '+no+' · بلا إجابة '+sk+' &nbsp;|&nbsp; Correct '+ok+' · Incorrect '+no+' · Unanswered '+sk+'</div>'+
+      '<div class="tbl"><table><thead><tr><th>الصعوبة · Difficulty</th><th>النتيجة · Score</th><th>%</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+      '<div class="filters" role="group" aria-label="filter">'+
+      [["all","الكل · All"],["no","الأخطاء · Incorrect"],["skip","بلا إجابة · Unanswered"]].map(function(f){
+        return '<button type="button" class="btn" data-f="'+f[0]+'" aria-pressed="'+(filter===f[0])+'">'+f[1]+'</button>'}).join("")+'</div>';
+    r.hidden=false;
+  }
+  function applyFilter(){
+    DATA.forEach(function(q,i){
+      var c=$("q"+i), show=true;
+      if(submitted&&filter!=="all") show=c.classList.contains(filter);
+      c.hidden=!show;
+    });
+  }
+
+  function submit(){
+    var un=DATA.filter(function(_,i){return ans[i]===undefined}).length;
+    if(un>0&&!armed){
+      armed=true; ["submitTop","submitBot"].forEach(function(id){var b=$(id);b.className="btn warn";b.textContent="يوجد "+un+" بلا إجابة، اضغط للتأكيد · "+un+" unanswered, tap to confirm"});
+      return;
+    }
+    armed=false; submitted=true; filter="all"; save(); paint();
+    var r=$("result"); r.scrollIntoView({behavior:"smooth",block:"start"});
+  }
+  function reset(){
+    if(!armedReset){
+      armedReset=true; ["submitTop","submitBot"].forEach(function(id){var b=$(id);b.className="btn warn";b.textContent="سيُمسح كل شيء، اضغط للتأكيد · Clears all answers, tap to confirm"});
+      return;
+    }
+    armedReset=false; ans={}; submitted=false; filter="all"; save(); paint(); window.scrollTo({top:0,behavior:"smooth"});
+  }
+  function onSubmit(){ submitted?reset():submit() }
+
+  document.addEventListener("change",function(e){
+    var t=e.target; if(t.type!=="radio"||submitted)return;
+    var m=/^q(\d+)$/.exec(t.name); if(!m||ans[+m[1]]!==undefined)return;
+    ans[+m[1]]=+t.value; armed=false; save(); paint();
+  });
+  document.addEventListener("click",function(e){
+    var t=e.target.closest("button"); if(!t)return;
+    if(t.dataset.go!==undefined){var c=$("q"+t.dataset.go); if(c.hidden){filter="all";applyFilter();renderResult()} c.scrollIntoView({behavior:"smooth",block:"start"})}
+    else if(t.dataset.f){filter=t.dataset.f; applyFilter(); renderResult()}
+  });
+  $("submitTop").addEventListener("click",onSubmit);
+  $("submitBot").addEventListener("click",onSubmit);
+
+  load(); build(); paint();
+})();
+</script>
+
+</body></html>

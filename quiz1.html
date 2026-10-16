@@ -1,0 +1,252 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Introduction to Computer Quiz 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one narrow reading column; sticky status bar with progress; question cards; review state after submit. */
+:root{
+  --bg:#f3f5f8; --surface:#ffffff; --fg:#17202e; --muted:#5a6678; --line:#d9dfe8;
+  --accent:#1d4f91; --accent-fg:#ffffff; --accent-soft:#e3ecf8;
+  --good:#17703f; --good-soft:#e1f3e8; --bad:#b3261e; --bad-soft:#fbe6e4; --warn:#8a5a00; --warn-soft:#fbefd2;
+  --font-body:"IBM Plex Sans Arabic","Segoe UI",Tahoma,system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f151f; --surface:#171f2c; --fg:#e6ebf3; --muted:#9aa7ba; --line:#2a3546;
+    --accent:#6ea3ea; --accent-fg:#0b1422; --accent-soft:#1c2c45;
+    --good:#5fd08c; --good-soft:#14301f; --bad:#ff8a80; --bad-soft:#3a1a18; --warn:#f0c15a; --warn-soft:#352a0e;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f151f; --surface:#171f2c; --fg:#e6ebf3; --muted:#9aa7ba; --line:#2a3546;
+  --accent:#6ea3ea; --accent-fg:#0b1422; --accent-soft:#1c2c45;
+  --good:#5fd08c; --good-soft:#14301f; --bad:#ff8a80; --bad-soft:#3a1a18; --warn:#f0c15a; --warn-soft:#352a0e;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:16px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
+.wrap{max-width:760px;margin:0 auto}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line);
+  margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:10px max(16px,env(safe-area-inset-left,0px))}
+.bar-in{max-width:760px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.bar h1{font-size:15px;font-weight:600;margin:0;flex:1 1 220px;min-width:0;line-height:1.35}
+.bar h1 span{display:block;font-weight:400;color:var(--muted);font-size:12.5px}
+.count{font-family:var(--font-mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:7px 14px;font-weight:500;font-size:14px}
+.btn.primary{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.btn.warn{background:var(--warn-soft);color:var(--warn);border-color:var(--warn)}
+.btn:disabled{opacity:.5;cursor:default}
+.track{flex:1 0 100%;height:5px;background:var(--line);border-radius:3px;overflow:hidden}
+.fill{height:100%;width:0;background:var(--accent);transition:width .2s}
+
+.intro{margin:20px 0 12px;color:var(--muted);font-size:14.5px;display:grid;gap:4px}
+details.map{background:var(--surface);border:1px solid var(--line);border-radius:8px;margin:0 0 16px}
+details.map summary{padding:10px 14px;cursor:pointer;font-weight:500;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:6px;padding:4px 14px 14px}
+.grid button{border:1px solid var(--line);background:var(--bg);border-radius:5px;padding:5px 0;font-family:var(--font-mono);font-size:12px;font-variant-numeric:tabular-nums}
+.grid button.done{background:var(--accent-soft);border-color:var(--accent)}
+.grid button.ok{background:var(--good-soft);border-color:var(--good)}
+.grid button.no{background:var(--bad-soft);border-color:var(--bad)}
+.grid button.skip{background:var(--warn-soft);border-color:var(--warn)}
+
+#result{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;margin:0 0 16px;display:grid;gap:12px}
+.score{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
+.score b{font-size:40px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+.score span{color:var(--muted)}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{padding:6px 10px;text-align:start;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--muted);font-weight:500}
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.filters .btn[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent)}
+
+.q{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;margin:0 0 14px;scroll-margin-top:110px}
+.q.ok{border-color:var(--good)} .q.no{border-color:var(--bad)} .q.skip{border-color:var(--warn)}
+.meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px}
+.qid{font-family:var(--font-mono);font-size:12.5px;color:var(--muted)}
+.chip{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:1px 9px;color:var(--muted)}
+.d-easy{color:var(--good);border-color:var(--good)} .d-medium{color:var(--accent);border-color:var(--accent)}
+.d-hard{color:var(--warn);border-color:var(--warn)} .d-vhard{color:var(--bad);border-color:var(--bad)}
+.verdict{margin-inline-start:auto;font-size:13px;font-weight:600}
+.q.ok .verdict{color:var(--good)} .q.no .verdict{color:var(--bad)} .q.skip .verdict{color:var(--warn)}
+.qa{font-size:18px;font-weight:600;margin:0 0 4px;line-height:1.6;text-wrap:balance;overflow-wrap:anywhere}
+.qe{margin:0 0 12px;color:var(--muted);font-size:15px;overflow-wrap:anywhere}
+.opts{display:grid;gap:8px}
+.opt{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;border:1px solid var(--line);border-radius:8px;padding:9px 12px;cursor:pointer;background:var(--bg)}
+.opt:hover{border-color:var(--accent)}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt:has(input:focus-visible){outline:3px solid var(--accent);outline-offset:2px}
+.opt:has(input:checked){background:var(--accent-soft);border-color:var(--accent)}
+.letter{font-family:var(--font-mono);font-size:13px;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--muted);display:grid;place-items:center;color:var(--muted);margin-top:2px}
+.opt:has(input:checked) .letter{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.otext{display:grid;gap:1px;min-width:0}
+.oa{overflow-wrap:anywhere} .oe{color:var(--muted);font-size:14.5px;overflow-wrap:anywhere}
+.locked .opt{cursor:default}
+.locked .opt:hover{border-color:var(--line)}
+.opt.right{background:var(--good-soft);border-color:var(--good)}
+.opt.right .letter{background:var(--good);border-color:var(--good);color:var(--bg)}
+.opt.wrong{background:var(--bad-soft);border-color:var(--bad)}
+.opt.wrong .letter{background:var(--bad);border-color:var(--bad);color:var(--bg)}
+.expl{margin-top:12px;border-top:1px dashed var(--line);padding-top:10px;display:grid;gap:4px;font-size:14.5px}
+.expl .src{font-size:12.5px;color:var(--muted)}
+.foot{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;margin-top:20px}
+.note{color:var(--muted);font-size:13.5px}
+</style>
+
+<div class="bar"><div class="bar-in">
+  <h1>مقدمة في الحاسوب · الاختبار 1<span>Introduction to Computer · Quiz 1 of 2</span></h1>
+  <span class="count" id="cnt">0 / 0</span>
+  <button class="btn primary" id="submitTop" type="button">إنهاء وعرض النتيجة · Finish</button>
+  <div class="track"><div class="fill" id="fill"></div></div>
+</div></div>
+
+<main class="wrap">
+  <div class="intro">
+    <span dir="rtl" lang="ar">اختر إجابة واحدة لكل سؤال. يظهر التصحيح والشرح فور اختيار الإجابة، ولا يمكن تغييرها بعد ذلك. اضغط «إنهاء» لعرض النتيجة النهائية. تُحفظ إجاباتك في هذا المتصفح.</span>
+    <span dir="ltr" lang="en">Choose one answer per question. The correction and explanation appear right after you pick an answer, and it cannot be changed afterwards. Press “Finish” to see your final score. Your answers are kept in this browser.</span>
+  </div>
+  <details class="map" id="mapBox"><summary>خريطة الأسئلة · Question map</summary><div class="grid" id="grid"></div></details>
+  <section id="result" hidden aria-live="polite"></section>
+  <div id="list"></div>
+  <div class="foot">
+    <span class="note" id="foot-note"></span>
+    <button class="btn primary" id="submitBot" type="button">إنهاء وعرض النتيجة · Finish</button>
+  </div>
+</main>
+
+<script>
+(function(){
+  var PART=1;
+  var DATA=[{"id":"Q001","a":"ما التعريف الأدق للحاسوب؟","e":"Which is the most accurate definition of a computer?","o":[["جهاز لإخراج الصوت فقط","A device only for audio output"],["وسيلة اتصال لا تقبل البرامج","A communication medium that cannot run programs"],["مجموعة ملفات محفوظة دون معالجة","A collection of stored files without processing"],["جهاز إلكتروني قابل للبرمجة يستقبل البيانات ويعالجها ويخزنها ويخرجها كمعلومات","A programmable electronic device that receives, processes, stores data, and outputs information"]],"k":3,"d":"سهل","de":"Easy","t":"تعريف الحاسوب","xa":"الحاسوب يستقبل البيانات ويعالجها ويخزنها ثم يعرض النتائج كمعلومات.","xe":"A computer receives, processes, and stores data, then outputs results as information.","s":"Printed p. 2 / PDF p. 3 (Chapter 1)"},{"id":"Q002","a":"درجات 80 و75 و90 و85 قبل حساب المعدل تُعد ماذا؟","e":"What are scores 80, 75, 90, and 85 before calculating their average?","o":[["معلومات معالجة","Processed information"],["مخرجات نهائية بالضرورة","Necessarily final output"],["نظام تشغيل","An operating system"],["بيانات خام","Raw data"]],"k":3,"d":"سهل","de":"Easy","t":"البيانات والمعلومات","xa":"الأرقام قبل معالجتها حقائق خام، أما المعدل الناتج فهو معلومة.","xe":"Values before processing are raw facts; the resulting average is information.","s":"Printed p. 2 / PDF p. 3 (Chapter 1)"},{"id":"Q003","a":"إذا كان معدل الدرجات الأربع 82.5، فما التصنيف الأنسب للمعدل؟","e":"If the average of the four scores is 82.5, how should the average be classified?","o":[["بيانات خام غير معالجة","Unprocessed raw data"],["مكوّن مادي","A hardware component"],["معلومة","Information"],["وسيط تخزين","A storage medium"]],"k":2,"d":"سهل","de":"Easy","t":"البيانات والمعلومات","xa":"المعدل نتيجة معالجة البيانات وله معنى للمستخدم.","xe":"The average is a processed result that is meaningful to the user.","s":"Printed p. 2 / PDF p. 3 (Chapter 1)"},{"id":"Q004","a":"أي خاصية تعني تنفيذ ملايين أو مليارات العمليات في الثانية؟","e":"Which computer characteristic means performing millions or billions of operations per second?","o":[["الأتمتة","Automation"],["السرعة","Speed"],["الاتصال","Connectivity"],["القابلية للتطوير","Scalability"]],"k":1,"d":"سهل","de":"Easy","t":"خصائص الحاسوب","xa":"السرعة هي القدرة على تنفيذ عدد كبير من العمليات في وقت قصير.","xe":"Speed is the ability to perform many operations in a short time.","s":"Printed p. 3 / PDF p. 4 (Chapter 1)"},{"id":"Q005","a":"تعتمد صحة النتائج على صحة البيانات المدخلة؛ أي خاصية يوضح ذلك؟","e":"Results depend on the correctness of input data; which characteristic does this illustrate?","o":[["الدقة","Accuracy"],["الاتصال","Connectivity"],["الأتمتة","Automation"],["التخزين","Storage"]],"k":0,"d":"سهل","de":"Easy","t":"خصائص الحاسوب","xa":"يذكر المقرر أن الحاسوب يعطي نتائج صحيحة إذا كانت البيانات صحيحة.","xe":"The notes state that a computer gives correct results when the data are correct.","s":"Printed p. 3 / PDF p. 4 (Chapter 1)"},{"id":"Q006","a":"تنفيذ العمل تلقائيًا بعد إعطاء البرنامج المناسب يسمى ماذا؟","e":"Automatically carrying out work after receiving the appropriate program is called what?","o":[["المقارنة","Comparison"],["الاعتمادية","Reliability"],["الإخراج","Output"],["الأتمتة","Automation"]],"k":3,"d":"سهل","de":"Easy","t":"خصائص الحاسوب","xa":"الأتمتة هي تنفيذ الأعمال تلقائيًا بعد تزويد الحاسوب بالبرنامج.","xe":"Automation is performing tasks automatically after the suitable program is provided.","s":"Printed p. 3 / PDF p. 4 (Chapter 1)"},{"id":"Q007","a":"ما الترتيب الوارد لدورة معالجة البيانات في الملزمة؟","e":"What sequence of the data-processing cycle is given in the notes?","o":[["الإدخال ثم المعالجة ثم التخزين ثم الإخراج","Input, then processing, then storage, then output"],["التخزين ثم الإخراج ثم الإدخال ثم المعالجة","Storage, output, input, processing"],["الإخراج ثم التخزين ثم المعالجة ثم الإدخال","Output, storage, processing, input"],["المعالجة ثم الإدخال ثم الإخراج ثم التخزين","Processing, input, output, storage"]],"k":0,"d":"سهل","de":"Easy","t":"دورة معالجة البيانات","xa":"الملزمة تعرض المراحل بالترتيب Input → Processing → Storage → Output.","xe":"The notes show Input → Processing → Storage → Output.","s":"Printed p. 4 / PDF p. 5 (Chapter 1)"},{"id":"Q008","a":"أي مجموعة تمثل العناصر الأربعة الرئيسية لنظام الحاسوب؟","e":"Which set represents the four main elements of a computer system?","o":[["CPU وRAM وSSD وGPU فقط","Only CPU, RAM, SSD, and GPU"],["Windows وLinux وAndroid وiOS","Windows, Linux, Android, and iOS"],["Input وOutput وInternet وPrinter","Input, Output, Internet, and Printer"],["Hardware وSoftware وData وUsers","Hardware, Software, Data, and Users"]],"k":3,"d":"سهل","de":"Easy","t":"مكونات نظام الحاسوب","xa":"العناصر الأربعة هي المكونات المادية والبرمجيات والبيانات والمستخدمون.","xe":"The four elements are hardware, software, data, and users.","s":"Printed p. 5 / PDF p. 6 (Chapter 1)"},{"id":"Q009","a":"أي وصف يطابق RAM مقارنةً بـ SSD/HDD؟","e":"Which description matches RAM compared with SSD/HDD?","o":[["ذاكرة مؤقتة وسريعة تُستخدم أثناء التشغيل","Temporary, fast memory used during operation"],["برنامج تطبيقي","An application program"],["تخزين دائم أبطأ نسبيًا","Relatively slower permanent storage"],["جهاز إخراج","An output device"]],"k":0,"d":"سهل","de":"Easy","t":"Memory وStorage","xa":"الملزمة تميز RAM بأنها مؤقتة وسريعة، بينما التخزين يحفظ الملفات.","xe":"The notes describe RAM as temporary and fast, while storage keeps files.","s":"Printed p. 6 / PDF p. 7 (Chapter 1)"},{"id":"Q010","a":"أي دور من الأدوار التالية مذكور ضمن مستخدمي نظام الحاسوب؟","e":"Which role is listed among computer-system users?","o":[["منفذ HDMI","HDMI port"],["قرص دوار","Spinning disk"],["مشتت حراري","Heat sink"],["محلل بيانات","Data analyst"]],"k":3,"d":"سهل","de":"Easy","t":"المستخدمون","xa":"تتضمن القائمة المستخدم النهائي والمبرمج ومسؤول النظام ومحلل البيانات.","xe":"The list includes end user, programmer, system administrator, and data analyst.","s":"Printed p. 6 / PDF p. 7 (Chapter 1)"},{"id":"Q011","a":"ما المقصود بـ Hardware؟","e":"What does hardware mean?","o":[["قواعد تبادل البيانات","Rules for exchanging data"],["البرامج والتعليمات فقط","Programs and instructions only"],["الأجزاء الفيزيائية والإلكترونية التي يمكن رؤيتها أو لمسها","Physical and electronic parts that can be seen or touched"],["البيانات بعد معالجتها","Data after processing"]],"k":2,"d":"سهل","de":"Easy","t":"Hardware","xa":"Hardware يشمل الأجزاء الملموسة مثل المعالج ولوحة المفاتيح والشاشة.","xe":"Hardware includes tangible parts such as the CPU, keyboard, and monitor.","s":"Printed p. 11 / PDF p. 12 (Chapter 2)"},{"id":"Q012","a":"أي جهاز يصنف ضمن أجهزة الإدخال؟","e":"Which device is classified as an input device?","o":[["مكبرات الصوت Speakers","Speakers"],["جهاز العرض Projector","Projector"],["الطابعة Printer","Printer"],["الماسح الضوئي Scanner","Scanner"]],"k":3,"d":"سهل","de":"Easy","t":"تصنيف المكونات","xa":"الماسح يحول المستندات والصور الورقية إلى بيانات رقمية.","xe":"A scanner converts paper documents and images into digital data.","s":"Printed p. 12 / PDF p. 13 (Chapter 2)"},{"id":"Q013","a":"ما الوظيفة الأساسية للوحة الأم؟","e":"What is the main function of the motherboard?","o":[["ربط المكونات الأساسية والمنافذ وبطاقات التوسعة","Connecting core components, ports, and expansion cards"],["حفظ الملفات على الإنترنت فقط","Storing files online only"],["تنفيذ العمليات الحسابية وحدها","Performing arithmetic only"],["عرض الصور فقط","Displaying images only"]],"k":0,"d":"سهل","de":"Easy","t":"Motherboard","xa":"اللوحة الأم هي اللوحة الرئيسية التي ترتبط بها المكونات الأساسية.","xe":"The motherboard is the main board to which core components connect.","s":"Printed p. 13 / PDF p. 14 (Chapter 2)"},{"id":"Q014","a":"ما المكونات الأساسية الثلاثة للـ CPU المذكورة في الملزمة؟","e":"Which three core CPU components are named in the notes?","o":[["Monitor وKeyboard وMouse","Monitor, keyboard, and mouse"],["RAM وSSD وHDD","RAM, SSD, and HDD"],["ALU ووحدة التحكم والمسجلات","ALU, Control Unit, and Registers"],["Router وSwitch وModem","Router, switch, and modem"]],"k":2,"d":"سهل","de":"Easy","t":"CPU","xa":"يتكون المعالج من وحدة الحساب والمنطق ووحدة التحكم والمسجلات.","xe":"The CPU consists of the ALU, Control Unit, and registers.","s":"Printed p. 15 / PDF p. 16 (Chapter 2)"},{"id":"Q015","a":"أي مهمة تؤديها وحدة الحساب والمنطق ALU؟","e":"Which task does the ALU perform?","o":[["تبريد المعالج","Cooling the processor"],["تنظيم الملفات والمجلدات","Organizing files and folders"],["توجيه البيانات بين الشبكات","Routing data between networks"],["العمليات الحسابية والمقارنة والمنطقية","Arithmetic, comparison, and logical operations"]],"k":3,"d":"سهل","de":"Easy","t":"ALU","xa":"تختص ALU بالعمليات الحسابية والمقارنة والعمليات المنطقية.","xe":"The ALU handles arithmetic, comparison, and logical operations.","s":"Printed p. 15 / PDF p. 16 (Chapter 2)"},{"id":"Q016","a":"ما دور وحدة التحكم CU؟","e":"What is the role of the Control Unit (CU)?","o":[["إنتاج الصوت","Producing sound"],["تحويل الورق إلى بيانات رقمية","Converting paper into digital data"],["تخزين الملفات طويل الأجل","Long-term file storage"],["تنظيم وتنسيق تنفيذ التعليمات","Organizing and coordinating instruction execution"]],"k":3,"d":"سهل","de":"Easy","t":"Control Unit","xa":"تخبر وحدة التحكم المكونات ماذا تفعل ومتى.","xe":"The Control Unit tells components what to do and when.","s":"Printed p. 16 / PDF p. 17 (Chapter 2)"},{"id":"Q017","a":"ما مراحل دورة التعليمة بالترتيب؟","e":"What are the stages of the instruction cycle in order?","o":[["تنفيذ ثم تخزين ثم جلب","Execute, store, then fetch"],["تحميل ثم اتصال ثم تبريد","Load, connect, then cool"],["إدخال ثم طباعة ثم حذف","Input, print, then delete"],["جلب ثم فك/تحليل ثم تنفيذ","Fetch, decode, then execute"]],"k":3,"d":"سهل","de":"Easy","t":"Instruction Cycle","xa":"الملزمة تبسط الدورة إلى Fetch وDecode وExecute.","xe":"The notes simplify the cycle to Fetch, Decode, and Execute.","s":"Printed p. 16 / PDF p. 17 (Chapter 2)"},{"id":"Q018","a":"بأي وحدة تقاس سرعة ساعة المعالج عادةً؟","e":"In what unit is CPU clock speed usually measured?","o":[["Volt وAmpere فقط","Only volt and ampere"],["Hertz (Hz)، ومن مضاعفاته MHz وGHz","Hertz (Hz), with MHz and GHz as common multiples"],["Pixel وFrame","Pixel and frame"],["Byte وBit","Byte and bit"]],"k":1,"d":"سهل","de":"Easy","t":"CPU speed","xa":"تذكر الملزمة Hz وMHz وGHz، وتحذر من تقييم الأداء بالساعة وحدها.","xe":"The notes list Hz, MHz, and GHz, and warn that clock speed alone does not determine performance.","s":"Printed p. 17 / PDF p. 18 (Chapter 2)"},{"id":"Q019","a":"ماذا يحدث عادةً لمحتويات RAM عند إيقاف التشغيل؟","e":"What usually happens to RAM contents when power is turned off?","o":[["تُرسل إلى الطابعة","They are sent to the printer"],["تفقد محتوياتها لأنها مؤقتة","Its contents are lost because it is temporary"],["تُحفظ دائمًا على القرص دون تدخل","They are always saved to disk without action"],["تتحول تلقائيًا إلى ROM","It automatically becomes ROM"]],"k":1,"d":"سهل","de":"Easy","t":"RAM","xa":"RAM ذاكرة متطايرة تفقد محتوياتها عند إيقاف التشغيل.","xe":"RAM is volatile memory and loses its contents when power is off.","s":"Printed p. 17 / PDF p. 18 (Chapter 2)"},{"id":"Q020","a":"ما الخاصية التي تميز ROM في الملزمة؟","e":"Which property distinguishes ROM in the notes?","o":[["ذاكرة تفقد كل محتوياتها فورًا","Memory that immediately loses all contents"],["وحدة لمعالجة الرسومات","A graphics-processing unit"],["ذاكرة غير متطايرة تحتفظ بالمحتويات بعد إيقاف التشغيل","Non-volatile memory that retains contents after shutdown"],["وسيط اتصال لاسلكي","A wireless communication medium"]],"k":2,"d":"سهل","de":"Easy","t":"ROM","xa":"ROM غير متطايرة وتُستخدم تقليديًا لبيانات وتعليمات بدء التشغيل.","xe":"ROM is non-volatile and is traditionally used for startup data and instructions.","s":"Printed p. 18 / PDF p. 19 (Chapter 2)"},{"id":"Q021","a":"أي وصف صحيح لـ HDD؟","e":"Which description of an HDD is correct?","o":[["هو وحدة المعالجة العامة","It is the general-purpose processor"],["يستخدم أقراصًا مغناطيسية دوارة","It uses spinning magnetic disks"],["يعتمد على ذاكرة Flash دون أجزاء دوارة","It uses flash memory without spinning parts"],["هو نظام تشغيل","It is an operating system"]],"k":1,"d":"سهل","de":"Easy","t":"HDD","xa":"يستخدم HDD أقراصًا مغناطيسية دوارة، ويكون غالبًا أبطأ من SSD.","xe":"An HDD uses spinning magnetic disks and is usually slower than an SSD.","s":"Printed p. 19 / PDF p. 20 (Chapter 2)"},{"id":"Q022","a":"لماذا يكون SSD عادة أسرع في الإقلاع من HDD؟","e":"Why is an SSD usually faster than an HDD for booting?","o":[["لأنه يستخدم ذاكرة Flash ولا يعتمد على أجزاء ميكانيكية دوارة","Because it uses flash memory and has no spinning mechanical parts"],["لأنه لا يخزن البيانات","Because it does not store data"],["لأنه يزيد سرعة ساعة CPU بالضرورة","Because it necessarily increases CPU clock speed"],["لأنه يعمل كطابعة","Because it acts as a printer"]],"k":0,"d":"سهل","de":"Easy","t":"SSD","xa":"توضح الملزمة أن SSD سريع الاستجابة ولا يحتوي على أجزاء ميكانيكية متحركة.","xe":"The notes explain that SSDs respond quickly and have no moving mechanical parts.","s":"Printed p. 20 / PDF p. 21 (Chapter 2)"},{"id":"Q023","a":"ما المهمة التي يتخصص فيها GPU؟","e":"What task is the GPU specialized for?","o":[["تخزين الملفات الدائم فقط","Permanent file storage only"],["تنسيق تنفيذ جميع تعليمات النظام وحده","Coordinating all system instructions alone"],["الرسومات ومعالجة كميات كبيرة من البيانات بالتوازي","Graphics and parallel processing of large amounts of data"],["إدارة الملفات فقط","File management only"]],"k":2,"d":"سهل","de":"Easy","t":"GPU","xa":"GPU معالج متخصص في الرسومات والعمليات المتوازية.","xe":"A GPU specializes in graphics and parallel operations.","s":"Printed p. 21 / PDF p. 22 (Chapter 2)"},{"id":"Q024","a":"أي جهاز يستخدم لإدخال الصوت؟","e":"Which device is used to input sound?","o":[["Printer","Printer"],["Microphone","Microphone"],["Speakers","Speakers"],["Projector","Projector"]],"k":1,"d":"سهل","de":"Easy","t":"Input devices","xa":"الميكروفون وحدة إدخال للصوت، بينما السماعات وحدة إخراج.","xe":"A microphone inputs sound, while speakers output sound.","s":"Printed p. 22 / PDF p. 23 (Chapter 2)"},{"id":"Q025","a":"لماذا تُعد شاشة اللمس جهاز إدخال وإخراج معًا؟","e":"Why is a touchscreen both an input and an output device?","o":[["تعرض المعلومات وتستقبل لمس المستخدم","It displays information and receives user touch"],["توجه البيانات بين الشبكات فقط","It only routes data between networks"],["تخزن الملفات وتنفذ العمليات الحسابية","It stores files and performs arithmetic"],["تطبع المستندات وتلتقط الصوت","It prints documents and captures sound"]],"k":0,"d":"سهل","de":"Easy","t":"Input/Output","xa":"تؤدي الشاشة اللمسية دور الإخراج بالعرض ودور الإدخال باستقبال اللمس.","xe":"A touchscreen outputs by displaying content and inputs by receiving touch.","s":"Printed p. 23 / PDF p. 24 (Chapter 2)"},{"id":"Q026","a":"أي منفذ يناسب نقل الصورة والصوت إلى شاشة وفق أمثلة المنافذ المذكورة؟","e":"Which listed port is suitable for carrying image and audio to a display?","o":[["Ethernet فقط","Ethernet only"],["HDMI","HDMI"],["Audio Jack فقط","Audio Jack only"],["USB Header الداخلي فقط","Internal USB header only"]],"k":1,"d":"سهل","de":"Easy","t":"Ports","xa":"تذكر الملزمة HDMI وDisplayPort ضمن منافذ الحاسوب.","xe":"The notes list HDMI and DisplayPort among computer ports.","s":"Printed p. 24 / PDF p. 25 (Chapter 2)"},{"id":"Q027","a":"ما النتيجة المحتملة لارتفاع حرارة مكونات الحاسوب؟","e":"What is a possible result of excessive computer-component temperature?","o":[["زيادة السعة التخزينية","Increased storage capacity"],["تحسين الأداء دائمًا","Always improved performance"],["تحويل RAM إلى ROM","Converting RAM into ROM"],["انخفاض الأداء وعدم استقرار النظام","Reduced performance and system instability"]],"k":3,"d":"سهل","de":"Easy","t":"Cooling","xa":"تشير الملزمة إلى أن الحرارة المرتفعة قد تقلل الأداء والاستقرار والعمر.","xe":"The notes state that excessive heat can reduce performance, stability, and component lifespan.","s":"Printed p. 25 / PDF p. 26 (Chapter 2)"},{"id":"Q028","a":"ما المقصود بالبرمجيات Software؟","e":"What is software?","o":[["الأسلاك والمنافذ فقط","Only wires and ports"],["البيانات الخام فقط","Only raw data"],["الأجزاء الملموسة فقط","Only tangible parts"],["مجموعة البرامج والتعليمات التي تحدد ما ينفذه الحاسوب","Programs and instructions that specify what the computer does"]],"k":3,"d":"سهل","de":"Easy","t":"Software","xa":"البرمجيات تعليمات وبرامج، ويحتاج الحاسوب إلى Hardware وSoftware.","xe":"Software consists of programs and instructions; a computer needs hardware and software.","s":"Printed p. 27 / PDF p. 28 (Chapter 3)"},{"id":"Q029","a":"أي مثال على System Software؟","e":"Which is an example of system software?","o":[["Linux","Linux"],["Microsoft Word","Microsoft Word"],["Media Player","Media player"],["Image Editor","Image editor"]],"k":0,"d":"سهل","de":"Easy","t":"System Software","xa":"أنظمة التشغيل مثل Linux تدير موارد الحاسوب وتساعد التطبيقات على العمل.","xe":"Operating systems such as Linux manage computer resources and support applications.","s":"Printed p. 27 / PDF p. 28 (Chapter 3)"},{"id":"Q030","a":"أي برنامج يُعد تطبيقًا لإنشاء المستندات؟","e":"Which application is used to create documents?","o":[["BIOS/UEFI Firmware","BIOS/UEFI firmware"],["Router","Router"],["Microsoft Word","Microsoft Word"],["RAM","RAM"]],"k":2,"d":"سهل","de":"Easy","t":"Application Software","xa":"Word مثال على Application Software لإنجاز مهمة محددة.","xe":"Word is application software for a specific task.","s":"Printed p. 27 / PDF p. 28 (Chapter 3)"},{"id":"Q031","a":"ما الدور العام لنظام التشغيل؟","e":"What is the general role of an operating system?","o":[["تحويل كل البيانات إلى صور فقط","Converting all data to images only"],["استبدال جميع التطبيقات","Replacing all applications"],["إدارة موارد الحاسوب وتوفير وسيط بين المستخدم والبرامج والمكونات","Managing computer resources and providing an interface between users, programs, and hardware"],["توصيل الشبكات العالمية فقط","Connecting global networks only"]],"k":2,"d":"سهل","de":"Easy","t":"Operating System","xa":"نظام التشغيل يدير الموارد ويوفر بيئة للتفاعل مع الجهاز والبرامج.","xe":"An OS manages resources and provides an environment for interacting with hardware and software.","s":"Printed p. 28 / PDF p. 29 (Chapter 3)"},{"id":"Q032","a":"ما وظيفة Memory Management في نظام التشغيل؟","e":"What is the function of memory management in an OS?","o":[["تخصيص الذاكرة للبرامج أثناء التشغيل","Allocating memory to programs during execution"],["توجيه الحزم عبر الإنترنت","Routing packets across the internet"],["إنشاء الصور المتحركة","Creating animations"],["تنظيم عناوين المواقع","Organizing website addresses"]],"k":0,"d":"سهل","de":"Easy","t":"OS Memory Management","xa":"إدارة الذاكرة تعني تخصيص الذاكرة للبرامج أثناء العمل.","xe":"Memory management allocates memory to programs while they run.","s":"Printed p. 28 / PDF p. 29 (Chapter 3)"},{"id":"Q033","a":"أي وظيفة ترتبط بإدارة الملفات؟","e":"Which function is associated with file management?","o":[["تنفيذ العمليات المنطقية داخل CPU","Executing logic operations inside the CPU"],["إنشاء الملفات والمجلدات وحفظها وتنظيمها","Creating, saving, and organizing files and folders"],["تحويل الصوت إلى إشارة كهربائية فقط","Only converting sound to an electrical signal"],["ربط الشبكات المختلفة","Connecting different networks"]],"k":1,"d":"سهل","de":"Easy","t":"File Management","xa":"إدارة الملفات تنظم إنشاء الملفات والمجلدات وحفظها.","xe":"File management organizes file and folder creation and saving.","s":"Printed p. 28 / PDF p. 29 (Chapter 3)"},{"id":"Q034","a":"ما نوع الملف الذي يشير إليه الامتداد .xlsx؟","e":"What file type does the .xlsx extension indicate?","o":[["جدول إلكتروني من Excel","An Excel spreadsheet"],["ملف صوت","An audio file"],["مستند Word","A Word document"],["ملف فيديو","A video file"]],"k":0,"d":"سهل","de":"Easy","t":"File extensions","xa":"تربط الملزمة .xlsx بـ Excel، و.docx بـ Word، و.pptx بـ PowerPoint.","xe":"The notes associate .xlsx with Excel, .docx with Word, and .pptx with PowerPoint.","s":"Printed p. 29 / PDF p. 30 (Chapter 3)"},{"id":"Q035","a":"أي فائدة قد يوفرها تحديث البرامج؟","e":"Which benefit may software updates provide?","o":[["إلغاء الحاجة إلى كلمات المرور","Eliminating the need for passwords"],["ضمان عدم حدوث أي خطأ مستقبلًا","Guaranteeing no future errors"],["زيادة RAM المادية تلقائيًا","Automatically increasing physical RAM"],["إصلاح الأخطاء وتحسين الأمان","Bug fixes and improved security"]],"k":3,"d":"سهل","de":"Easy","t":"Software updates","xa":"من فوائد التحديثات إصلاح الأخطاء وتحسين الأداء وإضافة ميزات وتحسين الأمان.","xe":"Updates may fix bugs, improve performance, add features, and improve security.","s":"Printed p. 29 / PDF p. 30 (Chapter 3)"},{"id":"Q036","a":"ما الرقمان المستخدمان في النظام الثنائي؟","e":"Which digits are used in the binary system?","o":[["0 إلى 7","0 through 7"],["0 و1","0 and 1"],["0 إلى 9","0 through 9"],["0 إلى 9 وA إلى F","0 through 9 and A through F"]],"k":1,"d":"سهل","de":"Easy","t":"Binary","xa":"النظام الثنائي أساسه 2 ويستخدم الرقمين 0 و1.","xe":"Binary has base 2 and uses digits 0 and 1.","s":"Printed p. 30 / PDF p. 31 (Chapter 4)"},{"id":"Q037","a":"كم Bit يتكون منها Byte واحد عادةً؟","e":"How many bits are usually in one byte?","o":[["8 bits","8 bits"],["16 bits","16 bits"],["2 bits","2 bits"],["10 bits","10 bits"]],"k":0,"d":"سهل","de":"Easy","t":"Bit and Byte","xa":"تذكر الملزمة العلاقة 1 Byte = 8 Bits.","xe":"The notes state 1 byte = 8 bits.","s":"Printed p. 31 / PDF p. 32 (Chapter 4)"},{"id":"Q038","a":"ما أساس النظام السداسي عشري؟","e":"What is the base of the hexadecimal system?","o":[["2","2"],["16","16"],["10","10"],["8","8"]],"k":1,"d":"سهل","de":"Easy","t":"Number systems","xa":"Hexadecimal أساسه 16 ويستخدم الرموز 0–9 وA–F.","xe":"Hexadecimal has base 16 and uses 0–9 and A–F.","s":"Printed p. 31 / PDF p. 32 (Chapter 4)"},{"id":"Q039","a":"ما وظيفة ASCII وفق الملزمة؟","e":"What is the function of ASCII according to the notes?","o":[["معيار لترميز مجموعة من الأحرف والرموز بقيم رقمية","A standard encoding a set of characters and symbols as numeric values"],["نوع ذاكرة مؤقتة","A type of temporary memory"],["برنامج لإدارة قواعد البيانات","A database-management program"],["بروتوكول لتوجيه الشبكات","A network-routing protocol"]],"k":0,"d":"سهل","de":"Easy","t":"ASCII","xa":"ASCII معيار ترميز لأحرف ورموز باستخدام قيم رقمية.","xe":"ASCII encodes a set of characters and symbols using numeric values.","s":"Printed p. 31 / PDF p. 32 (Chapter 4)"},{"id":"Q040","a":"ما ميزة Unicode الأساسية المذكورة؟","e":"What key advantage of Unicode is mentioned?","o":[["يعمل فقط مع اللغة الإنجليزية","It works only with English"],["يُستخدم لتبريد المعالج","It is used to cool the CPU"],["يدعم نصوصًا ورموزًا من لغات عالمية متعددة","It supports text and symbols from many world languages"],["يستخدم الرقمين 0 و1 فقط كأحرف","It uses only 0 and 1 as characters"]],"k":2,"d":"سهل","de":"Easy","t":"Unicode","xa":"يدعم Unicode العربية والإنجليزية والصينية واليابانية وغيرها.","xe":"Unicode supports Arabic, English, Chinese, Japanese, and other languages.","s":"Printed p. 32 / PDF p. 33 (Chapter 4)"},{"a":"ما القيمة العشرية للعدد الثنائي (1)₂؟","e":"What is the decimal value of the binary number (1)₂?","o":[["0","0"],["2","2"],["1","1"],["3","3"]],"k":2,"d":"سهل","de":"Easy","t":"تحويل: Binary إلى Decimal","xa":"نضرب كل خانة في وزنها ونجمع: 1×1 = 1.","xe":"Multiply each digit by its place value and add: 1×1 = 1.","s":"Printed pp. 31–32 / PDF pp. 32–33 (Chapter 4)","id":"Q041"},{"a":"ما القيمة العشرية للعدد الثنائي (10)₂؟","e":"What is the decimal value of the binary number (10)₂?","o":[["3","3"],["4","4"],["1","1"],["2","2"]],"k":3,"d":"سهل","de":"Easy","t":"تحويل: Binary إلى Decimal","xa":"نضرب كل خانة في وزنها ونجمع: 1×2 + 0×1 = 2.","xe":"Multiply each digit by its place value and add: 1×2 + 0×1 = 2.","s":"Printed pp. 31–32 / PDF pp. 32–33 (Chapter 4)","id":"Q042"},{"a":"ما القيمة العشرية للعدد الثنائي (11)₂؟","e":"What is the decimal value of the binary number (11)₂?","o":[["4","4"],["3","3"],["2","2"],["5","5"]],"k":1,"d":"سهل","de":"Easy","t":"تحويل: Binary إلى Decimal","xa":"نضرب كل خانة في وزنها ونجمع: 1×2 + 1×1 = 3.","xe":"Multiply each digit by its place value and add: 1×2 + 1×1 = 3.","s":"Printed pp. 31–32 / PDF pp. 32–33 (Chapter 4)","id":"Q043"},{"a":"ما القيمة العشرية للعدد الثنائي (100)₂؟","e":"What is the decimal value of the binary number (100)₂?","o":[["3","3"],["6","6"],["4","4"],["5","5"]],"k":2,"d":"سهل","de":"Easy","t":"تحويل: Binary إلى Decimal","xa":"نضرب كل خانة في وزنها ونجمع: 1×4 + 0×2 + 0×1 = 4.","xe":"Multiply each digit by its place value and add: 1×4 + 0×2 + 0×1 = 4.","s":"Printed pp. 31–32 / PDF pp. 32–33 (Chapter 4)","id":"Q044"},{"a":"ما القيمة العشرية للعدد الثنائي (101)₂؟","e":"What is the decimal value of the binary number (101)₂?","o":[["7","7"],["5","5"],["6","6"],["4","4"]],"k":1,"d":"سهل","de":"Easy","t":"تحويل: Binary إلى Decimal","xa":"نضرب كل خانة في وزنها ونجمع: 1×4 + 0×2 + 1×1 = 5.","xe":"Multiply each digit by its place value and add: 1×4 + 0×2 + 1×1 = 5.","s":"Printed pp. 31–32 / PDF pp. 32–33 (Chapter 4)","id":"Q045"},{"a":"ما القيمة العشرية للعدد الثنائي (110)₂؟","e":"What is the decimal value of the binary number (110)₂?","o":[["8","8"],["5","5"],["6","6"],["7","7"]],"k":2,"d":"سهل","de":"Easy","t":"تحويل: Binary إلى Decimal","xa":"نضرب كل خانة في وزنها ونجمع: 1×4 + 1×2 + 0×1 = 6.","xe":"Multiply each digit by its place value and add: 1×4 + 1×2 + 0×1 = 6.","s":"Printed pp. 31–32 / PDF pp. 32–33 (Chapter 4)","id":"Q046"},{"a":"ما القيمة العشرية للعدد الثنائي (111)₂؟","e":"What is the decimal value of the binary number (111)₂?","o":[["8","8"],["6","6"],["9","9"],["7","7"]],"k":3,"d":"سهل","de":"Easy","t":"تحويل: Binary إلى Decimal","xa":"نضرب كل خانة في وزنها ونجمع: 1×4 + 1×2 + 1×1 = 7.","xe":"Multiply each digit by its place value and add: 1×4 + 1×2 + 1×1 = 7.","s":"Printed pp. 31–32 / PDF pp. 32–33 (Chapter 4)","id":"Q047"},{"a":"ما القيمة العشرية للعدد الثنائي (1000)₂؟","e":"What is the decimal value of the binary number (1000)₂?","o":[["7","7"],["8","8"],["10","10"],["9","9"]],"k":1,"d":"سهل","de":"Easy","t":"تحويل: Binary إلى Decimal","xa":"نضرب كل خانة في وزنها ونجمع: 1×8 + 0×4 + 0×2 + 0×1 = 8.","xe":"Multiply each digit by its place value and add: 1×8 + 0×4 + 0×2 + 0×1 = 8.","s":"Printed pp. 31–32 / PDF pp. 32–33 (Chapter 4)","id":"Q048"},{"a":"ما القيمة العشرية للعدد الثنائي (1001)₂؟","e":"What is the decimal value of the binary number (1001)₂?","o":[["10","10"],["11","11"],["9","9"],["8","8"]],"k":2,"d":"سهل","de":"Easy","t":"تحويل: Binary إلى Decimal","xa":"نضرب كل خانة في وزنها ونجمع: 1×8 + 0×4 + 0×2 + 1×1 = 9.","xe":"Multiply each digit by its place value and add: 1×8 + 0×4 + 0×2 + 1×1 = 9.","s":"Printed pp. 31–32 / PDF pp. 32–33 (Chapter 4)","id":"Q049"},{"a":"ما القيمة العشرية للعدد الثنائي (1010)₂؟","e":"What is the decimal value of the binary number (1010)₂?","o":[["11","11"],["9","9"],["12","12"],["10","10"]],"k":3,"d":"سهل","de":"Easy","t":"تحويل: Binary إلى Decimal","xa":"نضرب كل خانة في وزنها ونجمع: 1×8 + 0×4 + 1×2 + 0×1 = 10.","xe":"Multiply each digit by its place value and add: 1×8 + 0×4 + 1×2 + 0×1 = 10.","s":"Printed pp. 31–32 / PDF pp. 32–33 (Chapter 4)","id":"Q050"},{"a":"ما التمثيل الثنائي للعدد العشري 1؟","e":"What is the binary representation of the decimal number 1?","o":[["100","100"],["1","1"],["10","10"],["11","11"]],"k":1,"d":"سهل","de":"Easy","t":"تحويل: Decimal إلى Binary","xa":"نقسم على 2 مرارًا ونقرأ البواقي من الأسفل إلى الأعلى: 1÷2=0 والباقي 1. الناتج (1)₂.","xe":"Divide by 2 repeatedly and read the remainders from bottom to top: 1÷2=0 remainder 1. Result: (1)₂.","s":"Printed pp. 31–32 / PDF pp. 32–33 (Chapter 4)","id":"Q051"},{"a":"ما التمثيل الثنائي للعدد العشري 2؟","e":"What is the binary representation of the decimal number 2?","o":[["01","01"],["11","11"],["1","1"],["10","10"]],"k":3,"d":"سهل","de":"Easy","t":"تحويل: Decimal إلى Binary","xa":"نقسم على 2 مرارًا ونقرأ البواقي من الأسفل إلى الأعلى: 2÷2=1 والباقي 0، 1÷2=0 والباقي 1. الناتج (10)₂.","xe":"Divide by 2 repeatedly and read the remainders from bottom to top: 2÷2=1 remainder 0, 1÷2=0 remainder 1. Result: (10)₂.","s":"Printed pp. 31–32 / PDF pp. 32–33 (Chapter 4)","id":"Q052"},{"a":"ما التمثيل الثنائي للعدد العشري 3؟","e":"What is the binary representation of the decimal number 3?","o":[["3","3"],["10","10"],["11","11"],["100","100"]],"k":2,"d":"سهل","de":"Easy","t":"تحويل: Decimal إلى Binary","xa":"نقسم على 2 مرارًا ونقرأ البواقي من الأسفل إلى الأعلى: 3÷2=1 والباقي 1، 1÷2=0 والباقي 1. الناتج (11)₂.","xe":"Divide by 2 repeatedly and read the remainders from bottom to top: 3÷2=1 remainder 1, 1÷2=0 remainder 1. Result: (11)₂.","s":"Printed pp. 31–32 / PDF pp. 32–33 (Chapter 4)","id":"Q053"},{"a":"ما التمثيل الثنائي للعدد العشري 4؟","e":"What is the binary representation of the decimal number 4?","o":[["101","101"],["001","001"],["100","100"],["11","11"]],"k":2,"d":"سهل","de":"Easy","t":"تحويل: Decimal إلى Binary","xa":"نقسم على 2 مرارًا ونقرأ البواقي من الأسفل إلى الأعلى: 4÷2=2 والباقي 0، 2÷2=1 والباقي 0، 1÷2=0 والباقي 1. الناتج (100)₂.","xe":"Divide by 2 repeatedly and read the remainders from bottom to top: 4÷2=2 remainder 0, 2÷2=1 remainder 0, 1÷2=0 remainder 1. Result: (100)₂.","s":"Printed pp. 31–32 / PDF pp. 32–33 (Chapter 4)","id":"Q054"},{"a":"ما التمثيل الثنائي للعدد العشري 5؟","e":"What is the binary representation of the decimal number 5?","o":[["110","110"],["5","5"],["100","100"],["101","101"]],"k":3,"d":"سهل","de":"Easy","t":"تحويل: Decimal إلى Binary","xa":"نقسم على 2 مرارًا ونقرأ البواقي من الأسفل إلى الأعلى: 5÷2=2 والباقي 1، 2÷2=1 والباقي 0، 1÷2=0 والباقي 1. الناتج (101)₂.","xe":"Divide by 2 repeatedly and read the remainders from bottom to top: 5÷2=2 remainder 1, 2÷2=1 remainder 0, 1÷2=0 remainder 1. Result: (101)₂.","s":"Printed pp. 31–32 / PDF pp. 32–33 (Chapter 4)","id":"Q055"},{"a":"ما التمثيل الثنائي للعدد العشري 6؟","e":"What is the binary representation of the decimal number 6?","o":[["110","110"],["111","111"],["101","101"],["011","011"]],"k":0,"d":"سهل","de":"Easy","t":"تحويل: Decimal إلى Binary","xa":"نقسم على 2 مرارًا ونقرأ البواقي من الأسفل إلى الأعلى: 6÷2=3 والباقي 0، 3÷2=1 والباقي 1، 1÷2=0 والباقي 1. الناتج (110)₂.","xe":"Divide by 2 repeatedly and read the remainders from bottom to top: 6÷2=3 remainder 0, 3÷2=1 remainder 1, 1÷2=0 remainder 1. Result: (110)₂.","s":"Printed pp. 31–32 / PDF pp. 32–33 (Chapter 4)","id":"Q056"},{"a":"ما التمثيل الثنائي للعدد العشري 7؟","e":"What is the binary representation of the decimal number 7?","o":[["111","111"],["7","7"],["1000","1000"],["110","110"]],"k":0,"d":"سهل","de":"Easy","t":"تحويل: Decimal إلى Binary","xa":"نقسم على 2 مرارًا ونقرأ البواقي من الأسفل إلى الأعلى: 7÷2=3 والباقي 1، 3÷2=1 والباقي 1، 1÷2=0 والباقي 1. الناتج (111)₂.","xe":"Divide by 2 repeatedly and read the remainders from bottom to top: 7÷2=3 remainder 1, 3÷2=1 remainder 1, 1÷2=0 remainder 1. Result: (111)₂.","s":"Printed pp. 31–32 / PDF pp. 32–33 (Chapter 4)","id":"Q057"},{"a":"ما التمثيل الثنائي للعدد العشري 8؟","e":"What is the binary representation of the decimal number 8?","o":[["0001","0001"],["1000","1000"],["1001","1001"],["111","111"]],"k":1,"d":"سهل","de":"Easy","t":"تحويل: Decimal إلى Binary","xa":"نقسم على 2 مرارًا ونقرأ البواقي من الأسفل إلى الأعلى: 8÷2=4 والباقي 0، 4÷2=2 والباقي 0، 2÷2=1 والباقي 0، 1÷2=0 والباقي 1. الناتج (1000)₂.","xe":"Divide by 2 repeatedly and read the remainders from bottom to top: 8÷2=4 remainder 0, 4÷2=2 remainder 0, 2÷2=1 remainder 0, 1÷2=0 remainder 1. Result: (1000)₂.","s":"Printed pp. 31–32 / PDF pp. 32–33 (Chapter 4)","id":"Q058"},{"a":"ما التمثيل الثنائي للعدد العشري 9؟","e":"What is the binary representation of the decimal number 9?","o":[["9","9"],["1001","1001"],["1000","1000"],["1010","1010"]],"k":1,"d":"سهل","de":"Easy","t":"تحويل: Decimal إلى Binary","xa":"نقسم على 2 مرارًا ونقرأ البواقي من الأسفل إلى الأعلى: 9÷2=4 والباقي 1، 4÷2=2 والباقي 0، 2÷2=1 والباقي 0، 1÷2=0 والباقي 1. الناتج (1001)₂.","xe":"Divide by 2 repeatedly and read the remainders from bottom to top: 9÷2=4 remainder 1, 4÷2=2 remainder 0, 2÷2=1 remainder 0, 1÷2=0 remainder 1. Result: (1001)₂.","s":"Printed pp. 31–32 / PDF pp. 32–33 (Chapter 4)","id":"Q059"},{"a":"ما التمثيل الثنائي للعدد العشري 10؟","e":"What is the binary representation of the decimal number 10?","o":[["0101","0101"],["1011","1011"],["1001","1001"],["1010","1010"]],"k":3,"d":"سهل","de":"Easy","t":"تحويل: Decimal إلى Binary","xa":"نقسم على 2 مرارًا ونقرأ البواقي من الأسفل إلى الأعلى: 10÷2=5 والباقي 0، 5÷2=2 والباقي 1، 2÷2=1 والباقي 0، 1÷2=0 والباقي 1. الناتج (1010)₂.","xe":"Divide by 2 repeatedly and read the remainders from bottom to top: 10÷2=5 remainder 0, 5÷2=2 remainder 1, 2÷2=1 remainder 0, 1÷2=0 remainder 1. Result: (1010)₂.","s":"Printed pp. 31–32 / PDF pp. 32–33 (Chapter 4)","id":"Q060"}];
+  var KEY="cq3-part-"+PART;
+  var L=["A","B","C","D"];
+  var DC={"سهل":"d-easy","متوسط":"d-medium","صعب":"d-hard","صعب جدًا":"d-vhard"};
+  var N=DATA.length, ans={}, submitted=false, filter="all", armed=false, armedReset=false;
+  var $=function(id){return document.getElementById(id)};
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+  function load(){try{var s=JSON.parse(localStorage.getItem(KEY)||"null");if(s&&s.a){ans=s.a;submitted=!!s.s}}catch(e){}}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify({a:ans,s:submitted}))}catch(e){}}
+
+  function build(){
+    var h="",g="";
+    DATA.forEach(function(q,i){
+      var opts=q.o.map(function(o,k){
+        return '<label class="opt"><input type="radio" name="q'+i+'" value="'+k+'" id="q'+i+'o'+k+'">'+
+          '<span class="letter">'+L[k]+'</span><span class="otext"><span class="oa" dir="rtl" lang="ar">'+esc(o[0])+
+          '</span><span class="oe" dir="ltr" lang="en">'+esc(o[1])+'</span></span></label>';
+      }).join("");
+      h+='<article class="q" id="q'+i+'" data-i="'+i+'"><div class="meta"><span class="qid">'+esc(q.id)+'</span>'+
+        '<span class="chip '+(DC[q.d]||"")+'">'+esc(q.d)+' · '+esc(q.de)+'</span>'+
+        '<span class="chip">'+esc(q.t)+'</span><span class="verdict"></span></div>'+
+        '<h2 class="qa" dir="rtl" lang="ar">'+esc(q.a)+'</h2><p class="qe" dir="ltr" lang="en">'+esc(q.e)+'</p>'+
+        '<div class="opts" role="radiogroup" aria-label="'+esc(q.id)+'">'+opts+'</div>'+
+        '<div class="expl" hidden><div dir="rtl" lang="ar"></div><div dir="ltr" lang="en"></div><div class="src"></div></div></article>';
+      g+='<button type="button" data-go="'+i+'" id="g'+i+'" aria-label="'+esc(q.id)+'">'+(i+1)+'</button>';
+    });
+    $("list").innerHTML=h; $("grid").innerHTML=g;
+  }
+
+  function paint(){
+    var done=0,right=0;
+    DATA.forEach(function(q,i){
+      var card=$("q"+i), has=ans[i]!==undefined, gb=$("g"+i);
+      var locked=submitted||has;
+      if(has){done++; if(ans[i]===q.k)right++;}
+      L.forEach(function(_,k){
+        var inp=$("q"+i+"o"+k); inp.checked=(ans[i]===k); inp.disabled=locked;
+        var lab=inp.parentNode; lab.classList.remove("right","wrong");
+        if(locked){ if(k===q.k)lab.classList.add("right"); else if(ans[i]===k)lab.classList.add("wrong"); }
+      });
+      card.classList.toggle("locked",locked);
+      card.classList.remove("ok","no","skip"); gb.className="";
+      var ex=card.querySelector(".expl"), vd=card.querySelector(".verdict");
+      if(locked){
+        var st=!has?"skip":(ans[i]===q.k?"ok":"no");
+        card.classList.add(st); gb.className=st;
+        vd.textContent=st==="ok"?"صحيح · Correct":st==="no"?"خطأ · Incorrect":"بلا إجابة · Unanswered";
+        var d=ex.children; d[0].textContent="الإجابة الصحيحة "+L[q.k]+": "+q.xa; d[1].textContent="Correct answer "+L[q.k]+": "+q.xe; d[2].textContent=q.s;
+        ex.hidden=false;
+      } else { vd.textContent=""; ex.hidden=true; }
+    });
+    $("cnt").textContent=done+" / "+N+" · ✓ "+right;
+    $("fill").style.width=(100*done/N)+"%";
+    $("foot-note").textContent=submitted?"":(N-done)+" متبقٍ · remaining";
+    ["submitTop","submitBot"].forEach(function(id){
+      var b=$(id); b.className="btn "+(submitted?"":"primary"); b.disabled=false;
+      b.textContent=submitted?"إعادة المحاولة · Retake":"إنهاء وعرض النتيجة · Finish";
+    });
+    applyFilter(); renderResult();
+  }
+
+  function renderResult(){
+    var r=$("result"); if(!submitted){r.hidden=true;return}
+    var ok=0,no=0,sk=0,by={};
+    DATA.forEach(function(q,i){
+      var k=q.d+"|"+q.de; by[k]=by[k]||{ar:q.d,en:q.de,n:0,ok:0};
+      by[k].n++;
+      if(ans[i]===undefined)sk++; else if(ans[i]===q.k){ok++;by[k].ok++} else no++;
+    });
+    var pct=Math.round(1000*ok/N)/10;
+    var rows=Object.keys(by).map(function(k){var b=by[k];
+      return "<tr><td>"+esc(b.ar)+" · "+esc(b.en)+"</td><td>"+b.ok+" / "+b.n+"</td><td>"+Math.round(100*b.ok/b.n)+"%</td></tr>"}).join("");
+    r.innerHTML='<div class="score"><b>'+ok+' / '+N+'</b><span>'+pct+'% · درجة واحدة لكل سؤال · 1 point per question</span></div>'+
+      '<div class="note">صحيح '+ok+' · خطأ '+no+' · بلا إجابة '+sk+' &nbsp;|&nbsp; Correct '+ok+' · Incorrect '+no+' · Unanswered '+sk+'</div>'+
+      '<div class="tbl"><table><thead><tr><th>الصعوبة · Difficulty</th><th>النتيجة · Score</th><th>%</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+      '<div class="filters" role="group" aria-label="filter">'+
+      [["all","الكل · All"],["no","الأخطاء · Incorrect"],["skip","بلا إجابة · Unanswered"]].map(function(f){
+        return '<button type="button" class="btn" data-f="'+f[0]+'" aria-pressed="'+(filter===f[0])+'">'+f[1]+'</button>'}).join("")+'</div>';
+    r.hidden=false;
+  }
+  function applyFilter(){
+    DATA.forEach(function(q,i){
+      var c=$("q"+i), show=true;
+      if(submitted&&filter!=="all") show=c.classList.contains(filter);
+      c.hidden=!show;
+    });
+  }
+
+  function submit(){
+    var un=DATA.filter(function(_,i){return ans[i]===undefined}).length;
+    if(un>0&&!armed){
+      armed=true; ["submitTop","submitBot"].forEach(function(id){var b=$(id);b.className="btn warn";b.textContent="يوجد "+un+" بلا إجابة، اضغط للتأكيد · "+un+" unanswered, tap to confirm"});
+      return;
+    }
+    armed=false; submitted=true; filter="all"; save(); paint();
+    var r=$("result"); r.scrollIntoView({behavior:"smooth",block:"start"});
+  }
+  function reset(){
+    if(!armedReset){
+      armedReset=true; ["submitTop","submitBot"].forEach(function(id){var b=$(id);b.className="btn warn";b.textContent="سيُمسح كل شيء، اضغط للتأكيد · Clears all answers, tap to confirm"});
+      return;
+    }
+    armedReset=false; ans={}; submitted=false; filter="all"; save(); paint(); window.scrollTo({top:0,behavior:"smooth"});
+  }
+  function onSubmit(){ submitted?reset():submit() }
+
+  document.addEventListener("change",function(e){
+    var t=e.target; if(t.type!=="radio"||submitted)return;
+    var m=/^q(\d+)$/.exec(t.name); if(!m||ans[+m[1]]!==undefined)return;
+    ans[+m[1]]=+t.value; armed=false; save(); paint();
+  });
+  document.addEventListener("click",function(e){
+    var t=e.target.closest("button"); if(!t)return;
+    if(t.dataset.go!==undefined){var c=$("q"+t.dataset.go); if(c.hidden){filter="all";applyFilter();renderResult()} c.scrollIntoView({behavior:"smooth",block:"start"})}
+    else if(t.dataset.f){filter=t.dataset.f; applyFilter(); renderResult()}
+  });
+  $("submitTop").addEventListener("click",onSubmit);
+  $("submitBot").addEventListener("click",onSubmit);
+
+  load(); build(); paint();
+})();
+</script>
+
+</body></html>
