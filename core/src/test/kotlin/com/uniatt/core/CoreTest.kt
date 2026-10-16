@@ -483,7 +483,7 @@ Page 1 of 3طبع بواسطة مختص كلية الهندسة
         assertEquals(60, p.filter { it.lecturePage == 0 }.sumOf { it.rowTo - it.rowFrom })
         val c = SheetLayout.columns(true)
         assertEquals(16, c.lectures.size)
-        assertTrue(c.lectures.first().x1 <= c.name.x0 + 0.01f && c.notes!!.x1 <= c.lectures.last().x0 + 0.01f && c.notes.x0 >= SheetLayout.MARGIN - 0.01f)
+        assertTrue(c.lectures.first().x1 <= c.name.x0 + 0.01f && c.notes!!.x1 <= c.lectures.last().x0 + 0.01f && c.notes!!.x0 >= SheetLayout.MARGIN - 0.01f)
     }
 }
 
