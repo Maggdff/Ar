@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WhatsApp Call IP Analyzer</string>
+    <string name="credit" translatable="false">Developed by Maggd Alosimi</string>
+
+    <string name="tab_capture">Capture</string>
+    <string name="tab_import">Import</string>
+    <string name="tab_results">Results</string>
+    <string name="tab_about">About</string>
+
+    <string name="capture_title">Live analysis</string>
+    <string name="capture_desc">Starts a local VPN tap that sees only WhatsApp\'s own traffic, forwards it unchanged, and lists the IP addresses, ports and protocols it uses. No root needed.</string>
+    <string name="capture_steps">1) Tap Start and approve the VPN request.  2) Place or receive a WhatsApp call for a few seconds.  3) Open the results.</string>
+    <string name="btn_start">Start analysis</string>
+    <string name="btn_stop">Stop</string>
+    <string name="status_running">Capturing…</string>
+    <string name="status_stopped">Stopped</string>
+    <string name="stat_packets">Packets: %1$s</string>
+    <string name="stat_duration">Duration: %1$s</string>
+    <string name="stat_unsupported">Skipped (unsupported/non-IP): %1$s</string>
+    <string name="hint_make_call">Now use WhatsApp: start a voice or video call.</string>
+    <string name="btn_view_results">View results (%1$s addresses)</string>
+    <string name="call_detected">Call-like media traffic detected</string>
+    <string name="call_not_detected">No call-like media traffic detected</string>
+
+    <string name="consent_title">Allow traffic analysis?</string>
+    <string name="consent_body">Android will ask you to allow a VPN connection. This VPN is local: only WhatsApp\'s traffic is routed through the app, it is forwarded to the normal network unchanged, and nothing is uploaded.\n\nThe app reads packet headers (addresses, ports, sizes) to build the report. Message and call contents are end-to-end encrypted and cannot be read. Use it only on your own device and calls.</string>
+    <string name="consent_accept">I agree, continue</string>
+    <string name="consent_cancel">Cancel</string>
+
+    <string name="import_title">Import a capture file</string>
+    <string name="import_desc">Open a .pcap or .pcapng file recorded elsewhere (for example with Wireshark or tcpdump). It is analysed on this device only.</string>
+    <string name="btn_pick">Choose file…</string>
+    <string name="importing">Analysing file…</string>
+    <string name="label_format">Format: %1$s</string>
+
+    <string name="results_empty">No results yet. Run a live analysis or import a capture file.</string>
+    <string name="btn_lookup">Look up country / ISP</string>
+    <string name="btn_lookup_all">Look up all</string>
+    <string name="btn_share_report">Share report</string>
+    <string name="btn_share_pcap">Share PCAP</string>
+    <string name="btn_copy">Copy</string>
+    <string name="lookup_note">Look-ups are optional and sent to the public RDAP registry service (rdap.org); only public IP addresses are sent.</string>
+    <string name="peer_note">Important: addresses marked "peer candidate" are only candidates. WhatsApp calls are often relayed through Meta servers, and a candidate can be a VPN, carrier gateway or relay rather than the other person.</string>
+    <string name="geo_source_note">Registry data: shows where the address block is registered, not a person\'s location.</string>
+    <string name="report_summary">Packets: %1$s · Duration: %2$s s</string>
+    <string name="report_local">Local address: %1$s</string>
+    <string name="report_self">Your own public address(es) seen in STUN: %1$s</string>
+
+    <string name="label_ports">Ports</string>
+    <string name="label_traffic">Traffic</string>
+    <string name="label_hosts">Names</string>
+    <string name="label_country">Country</string>
+    <string name="label_isp">ISP / organisation</string>
+    <string name="label_network">Network</string>
+
+    <string name="role_whatsapp_server">WhatsApp / Meta server</string>
+    <string name="role_whatsapp_relay">WhatsApp call relay</string>
+    <string name="role_peer">Possible call peer (candidate)</string>
+    <string name="role_dns">DNS</string>
+    <string name="role_local">Local network</string>
+    <string name="role_other">Other</string>
+    <string name="conf_high">High confidence</string>
+    <string name="conf_medium">Medium confidence</string>
+    <string name="conf_low">Low confidence</string>
+
+    <string name="reason_meta_range">Address belongs to a known Meta (Facebook/WhatsApp) range</string>
+    <string name="reason_meta_hostname">Resolved from a WhatsApp/Meta host name</string>
+    <string name="reason_meta_org">Registry lists Meta/Facebook as the owner</string>
+    <string name="reason_udp_bidirectional">UDP traffic flows in both directions</string>
+    <string name="reason_stun_seen">STUN/ICE signalling seen</string>
+    <string name="reason_stun_bidirectional">STUN/ICE messages exchanged both ways</string>
+    <string name="reason_rtp_like">Packets look like RTP/SRTP media</string>
+    <string name="reason_rtp_bidirectional">RTP/SRTP-like media in both directions</string>
+    <string name="reason_high_volume">High packet volume</string>
+    <string name="reason_non_meta_public">Public address outside known Meta ranges</string>
+    <string name="reason_dns_port">Only DNS ports used</string>
+    <string name="reason_non_public">Private / local address</string>
+
+    <string name="language_title">Language</string>
+    <string name="lang_system">System</string>
+    <string name="disclaimer_title">How to read the results</string>
+    <string name="disclaimer_body">The app reports evidence, not certainty. It does not reveal or prove the other person\'s IP address. WhatsApp usually relays calls through Meta servers; a direct peer-to-peer path is used only sometimes, and even then the address may belong to a VPN, a mobile carrier gateway (CGNAT) or a relay. Country and ISP come from registry records and do not show a physical location.</string>
+    <string name="privacy_title">Privacy</string>
+    <string name="privacy_body">All processing happens on your device. No account, no analytics, no uploads. Only WhatsApp\'s traffic is routed through the local VPN. The optional live PCAP keeps just the first 96 bytes of each packet in the app\'s private cache and is removed when the app\'s data is cleared. The only network request the app makes itself is the optional registry look-up you start.</string>
+    <string name="limits_title">Limitations</string>
+    <string name="limits_body">• IPv4 traffic is analysed live; IPv6 traffic bypasses the VPN tap (use a PCAP for IPv6).\n• Meta address ranges are a built-in snapshot and may become outdated.\n• Calls made over a different VPN or when another VPN is active cannot be captured.</string>
+
+    <string name="msg_import_done">Analysed %1$s packets</string>
+    <string name="msg_import_error">Could not read the file: %1$s</string>
+    <string name="msg_lookup_failed">No registry information found for %1$s</string>
+    <string name="msg_whatsapp_missing">WhatsApp is not installed on this device</string>
+    <string name="msg_vpn_denied">VPN permission was not granted</string>
+
+    <string name="notif_channel">Analysis status</string>
+    <string name="notif_title">Analysing WhatsApp traffic</string>
+    <string name="notif_text">Local VPN tap is active. Tap to open.</string>
+</resources>
