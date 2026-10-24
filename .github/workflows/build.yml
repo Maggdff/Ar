@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 17
@@ -15,12 +15,24 @@ jobs:
         with:
           gradle-version: 8.9
       - name: Private signing key (optional, from repo secrets)
+        id: ks
         env: { KS_B64: "${{ secrets.UNIATT_KS_B64 }}" }
-        run: if [ -n "$KS_B64" ]; then echo "$KS_B64" | base64 -d > keystore/uniatt.jks; fi
+        run: |
+          echo "custom=false" >> "$GITHUB_OUTPUT"
+          if [ -n "$KS_B64" ]; then
+            # remove spaces/newlines/CR that break base64, then decode safely
+            if printf '%s' "$KS_B64" | tr -d ' \r\n\t' | base64 -d > /tmp/custom.jks 2>/dev/null && [ -s /tmp/custom.jks ]; then
+              mkdir -p keystore && mv /tmp/custom.jks keystore/uniatt.jks
+              echo "custom=true" >> "$GITHUB_OUTPUT"
+              echo "Using private keystore from secrets"
+            else
+              echo "::warning::UNIATT_KS_B64 is not valid base64 - ignoring it and using the keystore in the repo"
+            fi
+          fi
       - name: Unit tests (codes + crypto + protocol + roster)
         run: gradle :core:testDebugUnitTest --stacktrace
       - name: Build release APKs (R8 + signed)
-        env: { UNIATT_KS_PASS: "${{ secrets.UNIATT_KS_PASS }}", UNIATT_KEY_ALIAS: "${{ secrets.UNIATT_KEY_ALIAS }}" }
+        env: { UNIATT_KS_PASS: "${{ steps.ks.outputs.custom == 'true' && secrets.UNIATT_KS_PASS || '' }}", UNIATT_KEY_ALIAS: "${{ steps.ks.outputs.custom == 'true' && secrets.UNIATT_KEY_ALIAS || '' }}" }
         run: gradle :student:assembleRelease :doctor:assembleRelease :admin:assembleRelease :devconsole:assembleRelease --stacktrace
       - uses: actions/upload-artifact@v4
         with:
