@@ -1,0 +1,32 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+
+    "m": { "$id": { ".read": "root.child('license/doc').val() == null || !root.child('license/doc').val().matches(/^UAL1\\|[0-9]+\\|[^|]*\\|S\\|.*/)", ".write": "root.child('license/doc').val() == null || !root.child('license/doc').val().matches(/^UAL1\\|[0-9]+\\|[^|]*\\|S\\|.*/)" } },
+
+    "license": {
+      ".read": true,
+      "doc": {
+        ".write": "auth != null && root.child('devAdmins').child(auth.uid).val() === true",
+        ".validate": "newData.isString() && newData.val().length < 2000 && newData.val().beginsWith('UAL1|')"
+      }
+    },
+
+    "devAdmins": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": false
+      }
+    },
+
+    "devlog": {
+      ".read": "auth != null && root.child('devAdmins').child(auth.uid).val() === true",
+      ".indexOn": ["t"],
+      "$entry": {
+        ".write": "auth != null && root.child('devAdmins').child(auth.uid).val() === true && !data.exists() && newData.exists()",
+        ".validate": "newData.hasChildren(['t', 'uid', 'action']) && newData.child('uid').val() === auth.uid && newData.child('t').val() === now"
+      }
+    }
+  }
+}

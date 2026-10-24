@@ -9,8 +9,25 @@ android {
         applicationId = "com.uniatt.admin"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
+        versionCode = 100 + (System.getenv("GITHUB_RUN_NUMBER")?.toIntOrNull() ?: 1)   // يزداد مع كل بناء فيُثبَّت التحديث فوق القديم
         versionName = "1.0"
+    }
+    signingConfigs {
+        // مفتاح توقيع ثابت داخل المستودع: يضمن أن كل APK جديد يُثبَّت فوق القديم بلا حذف التطبيق ولا فقد البيانات
+        create("uniatt") {
+            storeFile = rootProject.file("keystore/uniatt.jks")
+            val pw = System.getenv("UNIATT_KS_PASS")?.takeIf { it.isNotBlank() } ?: "uniatt-2026"
+            storePassword = pw; keyPassword = pw; keyAlias = System.getenv("UNIATT_KEY_ALIAS")?.takeIf { it.isNotBlank() } ?: "uniatt"
+        }
+    }
+    buildTypes {
+        getByName("debug") { signingConfig = signingConfigs.getByName("uniatt") }
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("uniatt")
+            isMinifyEnabled = true            // R8: تصغير وتعتيم أسماء الأصناف فيصعب فهم الشيفرة وبتر الفحوص
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -23,6 +40,7 @@ android {
 }
 dependencies {
     implementation(project(":core"))
+    implementation(project(":licensekit"))
     implementation(platform("androidx.compose:compose-bom:2024.09.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.material3:material3")

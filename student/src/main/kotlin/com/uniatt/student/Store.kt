@@ -105,6 +105,23 @@ class StudentStore(ctx: Context) {
         ResultBus.last.value = item
     }
 
+    /** يدمج عناصر سجل (من نسخة احتياطية) دون حذف الموجود ودون تكرار؛ يعيد عدد المضاف. */
+    @Synchronized
+    fun mergeHistory(items: List<HistoryItem>): Int {
+        val a = JSONArray(sp.getString("hist", "[]"))
+        val have = HashSet<String>()
+        for (i in 0 until a.length()) a.getJSONObject(i).let { have.add(it.getLong("t").toString() + "|" + it.getString("s")) }
+        val all = ArrayList<JSONObject>()
+        for (i in 0 until a.length()) all.add(a.getJSONObject(i))
+        var added = 0
+        for (it in items) if (have.add(it.time.toString() + "|" + it.sessionId)) { all.add(JSONObject().put("t", it.time).put("s", it.sessionId).put("r", it.status)); added++ }
+        if (added > 0) {
+            all.sortBy { it.getLong("t") }
+            sp.edit().putString("hist", JSONArray(all).toString()).apply()
+        }
+        return added
+    }
+
     /** يمسح الكود والبيانات والسجل (مفتاح Keystore يبقى). */
     fun clearAll() { sp.edit().clear().apply(); ResultBus.last.value = null; ResultBus.profileVersion.value++ }
 }

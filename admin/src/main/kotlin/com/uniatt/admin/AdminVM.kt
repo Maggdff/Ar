@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.uniatt.core.*
+import com.uniatt.licensekit.LicenseManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -49,6 +50,8 @@ class AdminVM(app: Application) : AndroidViewModel(app) {
     /** [manual] = المستخدم ضغط الزر، فنعرض النتيجة في نافذة؛ وإلا تبقى في سطر الحالة فقط. */
     fun syncNow(manual: Boolean = false) {
         viewModelScope.launch {
+            // الترخيص موقوف: لا مزامنة (لا نشر كشوف ولا استلام حضور) حتى يُستعاد؛ والبيانات المحلية تبقى كما هي
+            if (!LicenseManager.allowed()) { if (manual) message.value = "المزامنة متوقفة: الترخيص غير فعّال حاليًا"; return@launch }
             if (syncing.value) { syncAgain = true; return@launch }
             syncing.value = true
             do {
@@ -439,19 +442,23 @@ class AdminVM(app: Application) : AndroidViewModel(app) {
         return f to pass
     }
 
-    fun restore(bytes: ByteArray?, passInput: String) = viewModelScope.launch {
-        val pass = Codes.normalize(passInput) ?: run { message.value = "كود النسخة غير صحيح"; return@launch }
-        if (bytes == null) { message.value = "تعذّرت قراءة الملف"; return@launch }
+    /** يستعيد النسخة ويعيد رسالة النتيجة (تُستعمل من تبويب التقارير ومن شاشة إيقاف الترخيص). */
+    suspend fun restoreNow(bytes: ByteArray?, passInput: String): String {
+        val pass = Codes.normalize(passInput) ?: return "كود النسخة غير صحيح"
+        if (bytes == null) return "تعذّرت قراءة الملف"
         busy.value = true
         val restored = withContext(Dispatchers.Default) {
             Box.open(Box.MAGIC_BACKUP, bytes, pass)?.let { runCatching { StateJson.fromJson(String(it, Charsets.UTF_8)) }.getOrNull() }
         }
         busy.value = false
-        if (restored == null) { message.value = "تعذّرت الاستعادة: الكود خاطئ أو الملف تالف"; return@launch }
+        if (restored == null) return "تعذّرت الاستعادة: الكود خاطئ أو الملف تالف"
+        withContext(Dispatchers.IO) { store.snapshot("before_restore") }            // لقطة أمان للحالة الحالية قبل استبدالها
         mutate { restored }
         syncNow()
-        message.value = "تمت الاستعادة: ${restored.students.size} طالب، ${restored.doctors.size} دكتور"
+        return "تمت الاستعادة: ${restored.students.size} طالب، ${restored.doctors.size} دكتور"
     }
+
+    fun restore(bytes: ByteArray?, passInput: String) = viewModelScope.launch { message.value = restoreNow(bytes, passInput) }
 }
 
 /** كشف PDF مقروء ينتظر الموافقة: نوعه (شعب/مجموعات) والتخصص والمستوى اللذان اختارهما المسؤول. */

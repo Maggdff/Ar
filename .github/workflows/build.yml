@@ -14,22 +14,30 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: 8.9
+      - name: Private signing key (optional, from repo secrets)
+        env: { KS_B64: "${{ secrets.UNIATT_KS_B64 }}" }
+        run: if [ -n "$KS_B64" ]; then echo "$KS_B64" | base64 -d > keystore/uniatt.jks; fi
       - name: Unit tests (codes + crypto + protocol + roster)
         run: gradle :core:testDebugUnitTest --stacktrace
-      - name: Build debug APKs
-        run: gradle :student:assembleDebug :doctor:assembleDebug :admin:assembleDebug --stacktrace
+      - name: Build release APKs (R8 + signed)
+        env: { UNIATT_KS_PASS: "${{ secrets.UNIATT_KS_PASS }}", UNIATT_KEY_ALIAS: "${{ secrets.UNIATT_KEY_ALIAS }}" }
+        run: gradle :student:assembleRelease :doctor:assembleRelease :admin:assembleRelease :devconsole:assembleRelease --stacktrace
       - uses: actions/upload-artifact@v4
         with:
           name: student-app
-          path: student/build/outputs/apk/debug/*.apk
+          path: student/build/outputs/apk/release/*.apk
       - uses: actions/upload-artifact@v4
         with:
           name: doctor-app
-          path: doctor/build/outputs/apk/debug/*.apk
+          path: doctor/build/outputs/apk/release/*.apk
       - uses: actions/upload-artifact@v4
         with:
           name: admin-app
-          path: admin/build/outputs/apk/debug/*.apk
+          path: admin/build/outputs/apk/release/*.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: developer-console-app
+          path: devconsole/build/outputs/apk/release/*.apk
 
   pwa:
     # نسخة الآيفون (PWA): فحص الصياغة ثم نشرها على GitHub Pages (فعّل Pages ← Source: GitHub Actions)

@@ -98,6 +98,20 @@ class Relay(baseUrl: String, private val timeoutMs: Int = 20_000) {
 
     fun getLong(path: String): Long? = getString(path)?.toLongOrNull()
 
+    /**
+     * يقرأ النص المخزَّن (أو null) مع وقت الخادم من ترويسة HTTP «Date» (بدقة الثانية، دون أي كتابة في القاعدة).
+     * [serverMs] = 0 إن لم يرسل الخادم الترويسة.
+     */
+    fun getStringWithServerTime(path: String): Pair<String?, Long> {
+        val c = open(path, "GET")
+        try {
+            val body = readBody(c).trim()
+            val serverMs = c.getHeaderFieldDate("Date", 0L)
+            val v = if (body == "null" || body.isEmpty()) null else Json.unquote(body)
+            return v to serverMs
+        } finally { c.disconnect() }
+    }
+
     fun putString(path: String, value: String) {
         val c = open(path, "PUT")
         try {

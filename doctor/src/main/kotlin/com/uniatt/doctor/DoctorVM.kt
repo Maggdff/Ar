@@ -167,6 +167,8 @@ class DoctorVM(app: Application) : AndroidViewModel(app) {
     fun syncNow(manual: Boolean = false) {
         viewModelScope.launch {
             if (!paired.value) { if (manual) message.value = "امسح QR من هاتف المسؤول أولًا"; return@launch }
+            // الترخيص موقوف: لا مزامنة (لا كشف جديد ولا رفع حضور) حتى يُستعاد؛ بيانات الهاتف تبقى كما هي
+            if (!com.uniatt.licensekit.LicenseManager.allowed()) { if (manual) message.value = "المزامنة متوقفة: الترخيص غير فعّال حاليًا"; return@launch }
             if (syncing.value) return@launch
             syncing.value = true
             val r = DoctorSync.run(getApplication())

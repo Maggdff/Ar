@@ -29,3 +29,11 @@ java -cp "$B/t5:$CP" ImportTestKt
 java -cp "$B/t6:$CP" MergeTestKt
 java -cp "$B/t7:$CP" CourseFormTestKt
 java -cp "$B/t8:$CP" ClockTestKt http://127.0.0.1:$PORT http://127.0.0.1:$((PORT+2))
+
+# ---- الترخيص وواجهة المطوّر (لا يحتاجان android.jar) ----
+"$K/bin/kotlinc" tools/relay-test/LicenseTest.kt -cp "$B/core" -d "$B/t9"
+java -cp "$B/t9:$CP" LicenseTestKt
+"$K/bin/kotlinc" devconsole/src/main/kotlin/com/uniatt/devconsole/FirebaseAuthRest.kt devconsole/src/main/kotlin/com/uniatt/devconsole/DevApi.kt -cp "$B/core:$OJ" -d "$B/dev"
+"$K/bin/kotlinc" tools/relay-test/DevApiTest.kt -cp "$B/core:$B/dev:$OJ" -d "$B/t10"
+python3 tools/relay-test/fake_firebase.py $((PORT+3)) & SRV4=$!; sleep 1
+java -cp "$B/t10:$B/dev:$CP" DevApiTestKt http://127.0.0.1:$((PORT+3)); kill $SRV4

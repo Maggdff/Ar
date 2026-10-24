@@ -20,6 +20,10 @@ class AutoAttendService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        com.uniatt.licensekit.LicenseManager.ensure(applicationContext)
+        if (!com.uniatt.licensekit.LicenseManager.allowed()) {          // الترخيص موقوف: لا بحث بلوتوث (التعليق قابل للعكس)
+            ResultBus.ble.value = "متوقف: الترخيص غير فعّال"; stopSelf(); return START_NOT_STICKY
+        }
         val nm = getSystemService(NotificationManager::class.java)
         if (Build.VERSION.SDK_INT >= 26) nm.createNotificationChannel(NotificationChannel(CH, "التسجيل التلقائي", NotificationManager.IMPORTANCE_LOW))
         val n = (if (Build.VERSION.SDK_INT >= 26) Notification.Builder(this, CH) else @Suppress("DEPRECATION") Notification.Builder(this))

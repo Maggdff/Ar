@@ -2,12 +2,17 @@ package com.uniatt.admin
 
 import android.content.Context
 import androidx.work.*
+import com.uniatt.licensekit.LicenseManager
 import java.util.concurrent.TimeUnit
 
 /** مزامنة دورية في الخلفية كلما توفّر الإنترنت (حتى والتطبيق مغلق). */
 class SyncWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
     override suspend fun doWork(): ListenableWorker.Result {
-        val r = AdminSync.run(AdminStore(applicationContext))
+        val store = AdminStore(applicationContext)
+        LicenseManager.ensure(applicationContext) { store.load().effectiveRelay }
+        LicenseManager.refresh()
+        if (!LicenseManager.allowed()) return ListenableWorker.Result.success()       // الترخيص موقوف: لا مزامنة
+        val r = AdminSync.run(store)
         return if (r.offline) ListenableWorker.Result.retry() else ListenableWorker.Result.success()
     }
 

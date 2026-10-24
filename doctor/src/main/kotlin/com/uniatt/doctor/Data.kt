@@ -94,6 +94,13 @@ data class AttendanceRecord(
     @Query("UPDATE SessionEntity SET countedCount=:n WHERE sessionId=:id") suspend fun setCounted(id: String, n: Int)
     @Query("SELECT * FROM SessionEntity WHERE sessionId=:id") fun sessionFlow(id: String): Flow<SessionEntity?>
 
+    // ---- للنسخ الاحتياطي والاستعادة (كل الجداول كما هي، بما فيها الملغى) ----
+    @Query("SELECT * FROM StudentEntity") suspend fun allStudents(): List<StudentEntity>
+    @Query("SELECT * FROM Enrollment") suspend fun allEnrollments(): List<Enrollment>
+    @Query("SELECT * FROM AttendanceRecord") suspend fun allRecordsRaw(): List<AttendanceRecord>
+    /** استعادة جلسة: لا تستبدل الموجود (قد تكون أحدث من النسخة). */
+    @Insert(onConflict = OnConflictStrategy.IGNORE) suspend fun restoreSession(s: SessionEntity): Long
+
     @Insert(onConflict = OnConflictStrategy.IGNORE) suspend fun addAttendance(a: AttendanceRecord): Long
     @Query("SELECT * FROM AttendanceRecord WHERE sessionId=:sid ORDER BY timestamp DESC")
     fun attendanceOf(sid: String): Flow<List<AttendanceRecord>>
@@ -126,7 +133,9 @@ abstract class AppDb : RoomDatabase() {
         fun get(c: Context): AppDb = I ?: synchronized(this) {
             I ?: Room.databaseBuilder(c.applicationContext, AppDb::class.java, "attendance.db")
                 .addMigrations(MIGRATION_2_3, MIGRATION_3_4)           // يحفظ الحضور المسجَّل (لا مسح للبيانات)
-                .fallbackToDestructiveMigration()       // نسخ التطوير الأقدم من 2 فقط
+                // لا مسح صامت للبيانات إطلاقًا: الإصدار 1 فقط (نسخة تطوير قديمة جدًا) يُعاد بناؤه؛ أي إصدار آخر بلا مسار ترحيل
+                // يُظهر خطأً صريحًا بدل حذف سجلات الحضور. عند رفع version أضف Migration جديدًا هنا دائمًا.
+                .fallbackToDestructiveMigrationFrom(1)
                 .build().also { I = it }
         }
     }

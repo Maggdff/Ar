@@ -9,6 +9,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
+import com.uniatt.licensekit.BackupActions
+import com.uniatt.licensekit.LicenseHost
+import com.uniatt.licensekit.LicenseManager
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -22,13 +25,24 @@ class MainActivity : ComponentActivity() {
     private fun refreshOnline(minGapMs: Long) {
         val st = StudentStore(this)
         if (st.credentials() == null || System.currentTimeMillis() - st.lastTry < minGapMs) return
-        scope.launch { ResultBus.sync.value = "جارٍ تحديث الجدول…"; ResultBus.sync.value = OnlineSync.refreshNow(st) }
+        scope.launch {
+            LicenseManager.refresh()                                   // قد يكون المطوّر علّق الترخيص أو استعاده
+            if (!LicenseManager.allowed()) { ResultBus.sync.value = "المزامنة متوقفة: الترخيص غير فعّال"; return@launch }
+            ResultBus.sync.value = "جارٍ تحديث الجدول…"; ResultBus.sync.value = OnlineSync.refreshNow(st)
+        }
+    }
+
+    /** التصدير والاستعادة يبقيان متاحَين وقت إيقاف الترخيص: سجل الحضور لا يُحذف أبدًا. */
+    private val backupActions = object : BackupActions {
+        override suspend fun export() = StudentBackup.export(applicationContext)
+        override suspend fun restore(bytes: ByteArray, code: String) = StudentBackup.restore(applicationContext, bytes, code)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val store = StudentStore(this)
-        setContent { StudentApp(store, tick) }
+        LicenseManager.ensure(applicationContext)
+        setContent { LicenseHost(backupActions) { StudentApp(store, tick) } }
     }
 
     override fun onResume() {
@@ -36,7 +50,7 @@ class MainActivity : ComponentActivity() {
         tick++
         // إن كان التسجيل التلقائي مفعّلًا نتأكد أن الخدمة شغّالة (مثلًا بعد إعادة تشغيل الهاتف)
         StudentStore(this).let { st ->
-            if (st.autoBle && st.credentials() != null && blePermissionsGranted(this)) AutoAttendService.start(this)
+            if (st.autoBle && st.credentials() != null && blePermissionsGranted(this) && LicenseManager.allowed()) AutoAttendService.start(this)
         }
         // تحديث الجدول والبيانات عند فتح التطبيق (مرة كل 5 دقائق كحد أدنى)، وفورًا كلما عاد الاتصال بالإنترنت وهو مفتوح
         refreshOnline(5 * 60_000L)

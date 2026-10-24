@@ -218,6 +218,11 @@ class AdminStore(private val dir: File) {
 
     fun load(): AdminState = synchronized(LOCK) { read() }
 
+    /** ينسخ ملف الحالة الحالي قبل أي استبدال كامل (استعادة نسخة)، فلا تضيع البيانات الحالية إن كانت النسخة أقدم. */
+    fun snapshot(tag: String): Boolean = synchronized(LOCK) {
+        try { if (file.exists()) { file.copyTo(File(dir, "admin_state.$tag.json"), overwrite = true); true } else false } catch (_: Exception) { false }
+    }
+
     fun save(s: AdminState) = synchronized(LOCK) { write(s) }
 
     /** يقرأ الأحدث، يطبّق [f]، يحفظ، ويعيد النتيجة. */

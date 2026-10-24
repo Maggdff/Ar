@@ -50,6 +50,8 @@ object Box {
     val MAGIC_ROSTER: ByteArray = "UAR1".toByteArray(Charsets.US_ASCII)
     val MAGIC_ATTEND: ByteArray = "UAT1".toByteArray(Charsets.US_ASCII)
     val MAGIC_BACKUP: ByteArray = "UAB1".toByteArray(Charsets.US_ASCII)   // نسخة المسؤول الاحتياطية
+    val MAGIC_DOCTOR_BACKUP: ByteArray = "UDB1".toByteArray(Charsets.US_ASCII)   // نسخة الدكتور الاحتياطية
+    val MAGIC_STUDENT_BACKUP: ByteArray = "USB1".toByteArray(Charsets.US_ASCII)  // نسخة الطالب الاحتياطية (سجل الحضور)
     private const val SALT = 16
     private const val IV = 12
     private const val TAG = 16

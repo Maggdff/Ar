@@ -1,0 +1,7 @@
+-dontwarn org.bouncycastle.**
+-dontwarn com.gemalto.jp2.**
+-dontwarn javax.**
+-dontwarn java.awt.**
+-keep class com.tom_roush.pdfbox.** { *; }
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute x
