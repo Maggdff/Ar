@@ -1,3 +1,6 @@
+import java.security.KeyStore
+import java.security.MessageDigest
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -5,9 +8,9 @@ plugins {
 fun certSha256(): String {
     val f = rootProject.file("keystore/uniatt.jks")
     val pass = (System.getenv("UNIATT_KS_PASS")?.takeIf { it.isNotBlank() } ?: "uniatt-2026").toCharArray()
-    val ks = java.security.KeyStore.getInstance(f, pass)
+    val ks = KeyStore.getInstance(f, pass)
     val cert = ks.getCertificate(System.getenv("UNIATT_KEY_ALIAS")?.takeIf { it.isNotBlank() } ?: "uniatt")
-    return java.security.MessageDigest.getInstance("SHA-256").digest(cert.encoded).joinToString("") { "%02x".format(it) }
+    return MessageDigest.getInstance("SHA-256").digest(cert.encoded).joinToString("") { "%02x".format(it) }
 }
 android {
     namespace = "com.uniatt.licensekit"
