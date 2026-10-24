@@ -140,9 +140,13 @@ class CoreTest {
         assertEquals(38, back.sessions[0].counted); assertEquals(-1, back.sessions[1].counted)
         // ملف قديم بلا حقل العدّ يُقرأ كـ -1
         val old = AttendanceFile.parse("UAT1\nD\tD1\t5\nS\ts1\t1\t1000\t15\n")!!
-        assertEquals(-1, old.sessions[0].counted)
-        assertNull(AttendanceFile.parse("UAT1\nD\tD1\t5\nS\ts1\t1\t1000\t15\t3\t9\n"))
+        assertEquals(-1, old.sessions[0].counted); assertEquals(0, old.sessions[0].part)
+        // بحقل العدّ ورقم الجزء معًا (7 حقول): صالح
+        val withPart = AttendanceFile.parse("UAT1\nD\tD1\t5\nS\ts1\t1\t1000\t15\t3\t9\n")!!
+        assertEquals(3, withPart.sessions[0].counted); assertEquals(9, withPart.sessions[0].part)
         assertEquals(0, AttendanceFile.parse("UAT1\nD\tD1\t5\nS\ts1\t1\t1000\t15\t0\n")!!.sessions[0].counted)
+        // حقل زائد عن المعروف (8 حقول): غير صالح
+        assertNull(AttendanceFile.parse("UAT1\nD\tD1\t5\nS\ts1\t1\t1000\t15\t3\t9\t1\n"))
     }
 
     @Test fun countCheck() {

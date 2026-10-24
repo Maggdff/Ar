@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -37,10 +39,40 @@ import kotlinx.coroutines.withContext
 private val Green = Color(0xFF2E7D32)
 private val Red = Color(0xFFC62828)
 
+// هوية بصرية موحَّدة (نفس رموز الألوان في pwa/app.css وتطبيقَي الإدارة والدكتور): ٦٠٪ أساس محايد، ٣٠٪ نص/سطوح، ١٠٪ تمييز أزرق.
+private val BrandLightColors = lightColorScheme(
+    primary = Color(0xFF1F3FD0), onPrimary = Color.White,
+    primaryContainer = Color(0xFFE8ECFB), onPrimaryContainer = Color(0xFF1F3FD0),
+    secondary = Color(0xFF1B7F3B), onSecondary = Color.White,
+    secondaryContainer = Color(0xFFD6ECD9), onSecondaryContainer = Color(0xFF1B7F3B),
+    tertiary = Color(0xFFB26A00), onTertiary = Color.White,
+    error = Color(0xFFC62828), onError = Color.White,
+    background = Color(0xFFF4F6FB), onBackground = Color(0xFF1B1F2A),
+    surface = Color(0xFFFFFFFF), onSurface = Color(0xFF1B1F2A),
+    surfaceVariant = Color(0xFFE8ECFB), onSurfaceVariant = Color(0xFF5D6577),
+    outline = Color(0xFFD9DEEA), outlineVariant = Color(0xFFE8ECFB),
+)
+private val BrandDarkColors = darkColorScheme(
+    primary = Color(0xFF6B86FF), onPrimary = Color(0xFF0D1230),
+    primaryContainer = Color(0xFF252C42), onPrimaryContainer = Color(0xFF6B86FF),
+    secondary = Color(0xFF4CC16F), onSecondary = Color(0xFF0D1230),
+    secondaryContainer = Color(0xFF1E3B28), onSecondaryContainer = Color(0xFF4CC16F),
+    tertiary = Color(0xFFFFB54D), onTertiary = Color(0xFF2B1A00),
+    error = Color(0xFFFF6B6B), onError = Color(0xFF2B0A0A),
+    background = Color(0xFF10131C), onBackground = Color(0xFFECEFF6),
+    surface = Color(0xFF1A1F2D), onSurface = Color(0xFFECEFF6),
+    surfaceVariant = Color(0xFF252C42), onSurfaceVariant = Color(0xFF9AA3B8),
+    outline = Color(0xFF2C3347), outlineVariant = Color(0xFF252C42),
+)
+private val BrandShapes = Shapes(
+    extraSmall = RoundedCornerShape(8.dp), small = RoundedCornerShape(10.dp),
+    medium = RoundedCornerShape(14.dp), large = RoundedCornerShape(18.dp), extraLarge = RoundedCornerShape(24.dp),
+)
+
 @Composable
 fun StudentApp(store: StudentStore, tick: Int) {
     var hasCode by remember { mutableStateOf(store.credentials() != null) }
-    MaterialTheme {
+    MaterialTheme(colorScheme = if (isSystemInDarkTheme()) BrandDarkColors else BrandLightColors, shapes = BrandShapes) {
         AppBackground {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                 if (!hasCode) Activation(store) { hasCode = true }
