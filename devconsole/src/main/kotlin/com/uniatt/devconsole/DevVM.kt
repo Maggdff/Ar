@@ -60,7 +60,7 @@ class DevVM(app: Application) : AndroidViewModel(app) {
             saveSettings()
             val s = withContext(Dispatchers.IO) { FirebaseAuthRest(apiKey.value.trim()).signIn(email.value, password.value) }
             val ok = withContext(Dispatchers.IO) { DevApi(dbUrl.value.trim(), DevSession(FirebaseAuthRest(apiKey.value.trim()), s)).isAuthorized(s.uid) }
-            if (!ok) { message.value = "هذا الحساب ليس ضمن قائمة المطوّرين المعتمدين (devAdmins)"; return@launch }
+            if (!ok) { message.value = "هذا الحساب ليس ضمن قائمة المطوّرين المعتمدين (devAdmins)\nUID: ${s.uid}"; return@launch }
             open(s); password.value = ""; signedIn.value = true; reload()
         } catch (e: AuthException) { message.value = e.friendly }
         catch (e: DevApiException) { message.value = e.friendly }
